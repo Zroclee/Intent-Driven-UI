@@ -8,6 +8,7 @@
 
 <style scoped>
 .id-layout {
+  height: 100%;
   display: flex;
   flex-direction: row;
   flex: auto;

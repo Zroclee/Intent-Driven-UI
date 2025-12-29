@@ -1,0 +1,198 @@
+// Bubble 组件样式
+.id-bubble {
+  margin-top: var(--id-spacing-sm, 8px);
+  display: flex;
+  gap: var(--id-spacing-sm, 8px);
+  font-size: var(--id-font-size-base, 14px);
+  line-height: var(--id-line-height, 1.5715);
+  width: 100%;
+  box-sizing: border-box;
+
+  // 对齐方式
+  &.id-bubble-left {
+    justify-content: flex-start;
+  }
+
+  &.id-bubble-right {
+    justify-content: flex-end;
+  }
+
+  // 头像样式
+  .id-bubble-avatar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+
+    .id-bubble-avatar-wrapper {
+      display: inline-block;
+      position: relative;
+
+      img {
+        display: block;
+        object-fit: cover;
+      }
+    }
+  }
+
+  // 内容容器
+  .id-bubble-content-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--id-spacing-xs, 4px);
+    max-width: 80%;
+    flex: 1;
+
+    &.with-avatar {
+      max-width: calc(100% - 44px);
+    }
+  }
+
+  // 前缀插槽
+  .id-bubble-prefix {
+    display: flex;
+    align-items: center;
+    gap: var(--id-spacing-xs, 4px);
+    font-size: var(--id-font-size-xs, 12px);
+    color: var(--id-color-text-secondary, rgba(0, 0, 0, 0.65));
+    margin-bottom: 2px;
+  }
+
+  // 后缀插槽
+  .id-bubble-suffix {
+    display: flex;
+    align-items: center;
+    gap: var(--id-spacing-xs, 4px);
+    font-size: var(--id-font-size-xs, 12px);
+    color: var(--id-color-text-secondary, rgba(0, 0, 0, 0.65));
+    margin-top: 2px;
+  }
+
+  // Loading 容器
+  .loading-container {
+    display: flex;
+    align-items: center;
+    padding: var(--id-spacing-sm, 8px) var(--id-spacing-md, 12px);
+  }
+
+  // 气泡内容
+  .id-bubble-content {
+    display: inline-block;
+    padding: var(--id-spacing-sm, 8px) var(--id-spacing-md, 12px);
+    border-radius: var(--id-radius-lg, 8px);
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    transition: background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      border-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      color var(--id-duration-base, 200ms) var(--id-ease-in-out);
+
+    // filled 样式 (默认)
+    &.variant-filled {
+      background-color: var(--id-bubble-bg-filled);
+      color: var(--id-bubble-color-filled);
+
+      // 左侧气泡 (AI回复)
+      .id-bubble-left & {
+        background-color: var(--id-bubble-bg-left);
+        color: var(--id-bubble-color-left);
+      }
+
+      // 右侧气泡 (用户消息)
+      .id-bubble-right & {
+        background-color: var(--id-bubble-bg-right);
+        color: var(--id-bubble-color-right);
+      }
+    }
+
+    // bordered 样式
+    &.variant-bordered {
+      background-color: transparent;
+      border: 1px solid var(--id-bubble-border-color);
+      color: var(--id-bubble-color-bordered);
+
+      // 左侧气泡
+      .id-bubble-left & {
+        border-color: var(--id-bubble-border-left);
+      }
+
+      // 右侧气泡
+      .id-bubble-right & {
+        border-color: var(--id-bubble-border-right);
+      }
+    }
+
+    // none 样式 (无边框无背景)
+    &.variant-none {
+      background-color: transparent;
+      border: none;
+      padding: 0;
+      color: var(--id-bubble-color-none);
+    }
+  }
+
+  // Loading 动画
+  .id-bubble-loading {
+    display: flex;
+    align-items: center;
+    gap: var(--id-spacing-xs, 4px);
+
+    .loading-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--id-loading-color);
+      animation: bounce 1.4s infinite ease-in-out both;
+
+      &.dot-start {
+        animation-delay: -0.32s;
+      }
+
+      &.dot-middle {
+        animation-delay: -0.16s;
+      }
+
+      &.dot-end {
+        animation-delay: 0s;
+      }
+    }
+  }
+
+  // Loading 状态下的气泡
+  &.id-bubble-loading {
+    .id-bubble-content {
+      display: none;
+    }
+  }
+}
+
+// Loading 动画关键帧
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .id-bubble {
+    .id-bubble-content-container {
+      max-width: 85%;
+
+      &.with-avatar {
+        max-width: calc(100% - 48px);
+      }
+    }
+
+    .id-bubble-content {
+      padding: 10px 14px;
+      font-size: var(--id-font-size-sm, 13px);
+    }
+  }
+}

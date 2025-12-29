@@ -1,0 +1,160 @@
+// Input 组件基础样式
+.id-input {
+  // 容器样式
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+
+  // Textarea 基础样式
+  textarea {
+    width: 100%;
+    min-height: 24px;
+    max-height: 200px;
+    padding: var(--id-input-padding-base);
+    font-size: var(--id-font-size-base, 14px);
+    line-height: var(--id-line-height, 1.5715);
+    color: var(--id-input-color);
+    background-color: var(--id-input-bg);
+    border: 1px solid var(--id-input-border-color);
+    border-radius: var(--id-input-radius-base);
+    outline: none;
+    resize: none;
+    overflow-y: auto;
+    box-sizing: border-box;
+    transition: background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      border-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      box-shadow var(--id-duration-base, 200ms) var(--id-ease-in-out);
+
+    // 滚动条样式
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--id-color-border);
+      border-radius: var(--id-radius-base, 4px);
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    // 占位符样式
+    &::placeholder {
+      color: var(--id-input-color-placeholder);
+      font-size: var(--id-font-size-base, 14px);
+    }
+
+    // 聚焦状态
+    &:focus {
+      background-color: var(--id-input-bg-focus);
+      border-color: var(--id-input-border-color-focus);
+      box-shadow: var(--id-input-shadow-focus);
+    }
+
+    // 禁用状态
+    &:disabled {
+      background-color: var(--id-input-bg-disabled);
+      color: var(--id-input-color-disabled);
+      cursor: not-allowed;
+      resize: none;
+    }
+
+    // 只读状态
+    &:read-only {
+      background-color: var(--id-bg-component);
+      cursor: default;
+    }
+  }
+
+  // 尺寸变体
+  &.size-small {
+    textarea {
+      padding: var(--id-input-padding-sm);
+      font-size: var(--id-font-size-sm, 13px);
+      border-radius: var(--id-input-radius-sm);
+    }
+  }
+
+  &.size-large {
+    textarea {
+      padding: var(--id-input-padding-lg);
+      font-size: var(--id-font-size-lg, 16px);
+      border-radius: var(--id-input-radius-lg);
+    }
+  }
+
+  // 变体样式
+  &.variant-filled {
+    textarea {
+      background-color: var(--id-bg-page-container);
+
+      &:focus {
+        background-color: var(--id-bg-component);
+      }
+    }
+  }
+
+  &.variant-outlined {
+    textarea {
+      background-color: transparent;
+      border-color: var(--id-color-border);
+
+      &:focus {
+        background-color: var(--id-bg-component);
+        border-color: var(--id-color-primary);
+      }
+    }
+  }
+
+  // 状态变体
+  &.status-error {
+    textarea {
+      border-color: var(--id-color-error);
+
+      &:focus {
+        border-color: var(--id-color-error);
+        box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+      }
+    }
+  }
+
+  &.status-warning {
+    textarea {
+      border-color: var(--id-color-warning);
+
+      &:focus {
+        border-color: var(--id-color-warning);
+        box-shadow: 0 0 0 2px rgba(250, 173, 20, 0.1);
+      }
+    }
+  }
+
+  &.status-success {
+    textarea {
+      border-color: var(--id-color-success);
+
+      &:focus {
+        border-color: var(--id-color-success);
+        box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.1);
+      }
+    }
+  }
+
+  // 无边框变体
+  &.borderless {
+    textarea {
+      background-color: transparent;
+      border: none;
+      padding: var(--id-spacing-md, 12px) 0;
+
+      &:focus {
+        background-color: transparent;
+        box-shadow: none;
+      }
+    }
+  }
+}
+

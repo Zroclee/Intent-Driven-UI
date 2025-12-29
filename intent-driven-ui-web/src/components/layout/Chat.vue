@@ -4,7 +4,14 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps({
+  showAside: {
+    type: Boolean,
+    default: false
+  }
+})
+</script>
 
 <style scoped>
 .id-layout-chat {

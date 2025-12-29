@@ -1,86 +1,406 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* ============================================
+   Intent Driven UI - Design Tokens
+   公共组件样式变量 - 支持 --id- 前缀
+=========================================== */
+
+/* ============================================
+   基础色彩系统
+=========================================== */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  /* 主色 */
+  --id-color-primary: #1890ff;
+  --id-color-primary-light: #40a9ff;
+  --id-color-primary-lighter: #69c0ff;
+  --id-color-primary-dark: #096dd9;
+  --id-color-primary-darker: #0050b3;
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  /* 成功色 */
+  --id-color-success: #52c41a;
+  --id-color-success-light: #73d13d;
+  --id-color-success-dark: #389e0d;
 
-  --vt-c-indigo: #2c3e50;
+  /* 警告色 */
+  --id-color-warning: #faad14;
+  --id-color-warning-light: #ffc53d;
+  --id-color-warning-dark: #d48806;
 
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+  /* 错误色 */
+  --id-color-error: #ff4d4f;
+  --id-color-error-light: #ff7875;
+  --id-color-error-dark: #cf1322;
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  /* 信息色 */
+  --id-color-info: #1890ff;
+  --id-color-info-light: #40a9ff;
+  --id-color-info-dark: #096dd9;
+
+  /* 中性色 - 亮色模式 */
+  --id-color-white: #ffffff;
+  --id-color-black: #000000;
+
+  /* 灰色阶 */
+  --id-color-gray-1: #ffffff;
+  --id-color-gray-2: #fafafa;
+  --id-color-gray-3: #f5f5f5;
+  --id-color-gray-4: #f0f0f0;
+  --id-color-gray-5: #d9d9d9;
+  --id-color-gray-6: #bfbfbf;
+  --id-color-gray-7: #8c8c8c;
+  --id-color-gray-8: #595959;
+  --id-color-gray-9: #434343;
+  --id-color-gray-10: #262626;
+  --id-color-gray-11: #1f1f1f;
+  --id-color-gray-12: #141414;
 }
 
-/* semantic color variables for this project */
+/* ============================================
+   背景色彩
+=========================================== */
 :root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
+  /* 页面背景 */
+  --id-bg-page: #ffffff;
+  --id-bg-page-container: #f5f5f5;
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
+  /* 组件背景 */
+  --id-bg-component: #ffffff;
+  --id-bg-component-hover: #fafafa;
+  --id-bg-component-active: #f0f0f0;
 
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
+  /* 遮罩 */
+  --id-bg-mask: rgba(0, 0, 0, 0.45);
 
-  --section-gap: 160px;
+  /* 字体颜色 */
+  --id-color-text: rgba(0, 0, 0, 0.88);
+  --id-color-text-secondary: rgba(0, 0, 0, 0.65);
+  --id-color-text-tertiary: rgba(0, 0, 0, 0.45);
+  --id-color-text-quaternary: rgba(0, 0, 0, 0.25);
+
+  /* 边框颜色 */
+  --id-color-border: #d9d9d9;
+  --id-color-border-light: #f0f0f0;
+  --id-color-border-dark: #bfbfbf;
+
+  /* 分割线 */
+  --id-color-divider: rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================
+   暗黑模式
+=========================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* 页面背景 */
+    --id-bg-page: #141414;
+    --id-bg-page-container: #000000;
+
+    /* 组件背景 */
+    --id-bg-component: #1f1f1f;
+    --id-bg-component-hover: #262626;
+    --id-bg-component-active: #2f2f2f;
+
+    /* 遮罩 */
+    --id-bg-mask: rgba(0, 0, 0, 0.65);
+
+    /* 字体颜色 */
+    --id-color-text: rgba(255, 255, 255, 0.88);
+    --id-color-text-secondary: rgba(255, 255, 255, 0.65);
+    --id-color-text-tertiary: rgba(255, 255, 255, 0.45);
+    --id-color-text-quaternary: rgba(255, 255, 255, 0.25);
+
+    /* 边框颜色 */
+    --id-color-border: #434343;
+    --id-color-border-light: #303030;
+    --id-color-border-dark: #595959;
+
+    /* 分割线 */
+    --id-color-divider: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* ============================================
+   字体系统
+=========================================== */
+:root {
+  /* 字体族 */
+  --id-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --id-font-family-code: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  /* 字体大小 */
+  --id-font-size-xs: 12px;
+  --id-font-size-sm: 13px;
+  --id-font-size-base: 14px;
+  --id-font-size-lg: 16px;
+  --id-font-size-xl: 18px;
+  --id-font-size-xxl: 20px;
+
+  /* 行高 */
+  --id-line-height: 1.5715;
+  --id-line-height-sm: 1.5;
+  --id-line-height-lg: 1.6667;
+
+  /* 字重 */
+  --id-font-weight-normal: 400;
+  --id-font-weight-medium: 500;
+  --id-font-weight-semibold: 600;
+  --id-font-weight-bold: 700;
+}
+
+/* ============================================
+   间距系统
+=========================================== */
+:root {
+  --id-spacing-xs: 4px;
+  --id-spacing-sm: 8px;
+  --id-spacing-md: 12px;
+  --id-spacing-lg: 16px;
+  --id-spacing-xl: 24px;
+  --id-spacing-xxl: 32px;
+
+  /* 圆角 */
+  --id-radius-sm: 2px;
+  --id-radius-base: 4px;
+  --id-radius-lg: 8px;
+  --id-radius-xl: 12px;
+  --id-radius-round: 9999px;
+}
+
+/* ============================================
+   阴影系统
+=========================================== */
+:root {
+  --id-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  --id-shadow-base: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 6px -1px rgba(0, 0, 0, 0.04),
+    0 2px 4px 0 rgba(0, 0, 0, 0.04);
+  --id-shadow-lg: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --id-shadow-xl: 0 12px 24px -4px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================
+   过渡动画
+=========================================== */
+:root {
+  --id-duration-fast: 100ms;
+  --id-duration-base: 200ms;
+  --id-duration-slow: 300ms;
+
+  --id-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --id-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --id-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   Z-index 层级
+=========================================== */
+:root {
+  --id-z-dropdown: 1050;
+  --id-z-sticky: 1020;
+  --id-z-fixed: 1030;
+  --id-z-modal-backdrop: 1040;
+  --id-z-modal: 1050;
+  --id-z-popover: 1060;
+  --id-z-tooltip: 1070;
+}
+
+/* ============================================
+   Bubble 组件专用变量
+=========================================== */
+:root {
+  /* 气泡背景 */
+  --id-bubble-bg-left: #f0f2f5;
+  --id-bubble-bg-right: #1890ff;
+  --id-bubble-bg-filled: #f0f2f5;
+  --id-bubble-bg-bordered: transparent;
+
+  /* 气泡文字颜色 */
+  --id-bubble-color-left: #333;
+  --id-bubble-color-right: #fff;
+  --id-bubble-color-filled: #333;
+  --id-bubble-color-bordered: #333;
+  --id-bubble-color-none: #333;
+
+  /* 气泡边框 */
+  --id-bubble-border-color: #d9d9d9;
+  --id-bubble-border-left: #d9d9d9;
+  --id-bubble-border-right: #1890ff;
+
+  /* Loading 颜色 */
+  --id-loading-color: #1890ff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+    /* 气泡背景 - 暗黑模式 */
+    --id-bubble-bg-left: #2a2a2a;
+    --id-bubble-bg-right: #1890ff;
+    --id-bubble-bg-filled: #2a2a2a;
+    --id-bubble-bg-bordered: transparent;
 
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
+    /* 气泡文字颜色 - 暗黑模式 */
+    --id-bubble-color-left: #e0e0e0;
+    --id-bubble-color-right: #fff;
+    --id-bubble-color-filled: #e0e0e0;
+    --id-bubble-color-bordered: #e0e0e0;
+    --id-bubble-color-none: #e0e0e0;
 
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
+    /* 气泡边框 - 暗黑模式 */
+    --id-bubble-border-color: #404040;
+    --id-bubble-border-left: #404040;
+    --id-bubble-border-right: #1890ff;
+
+    /* Loading 颜色 - 暗黑模式 */
+    --id-loading-color: #4dabf7;
   }
 }
 
+/* ============================================
+   Header 组件专用变量
+=========================================== */
+:root {
+  /* Header 尺寸 */
+  --id-header-height: 60px;
+  --id-header-height-mobile: 56px;
+  --id-header-height-compact: 48px;
+
+  /* Header 背景 */
+  --id-header-bg: #ffffff;
+  --id-header-border-color: #e8e8e8;
+
+  /* Header 标题 */
+  --id-header-title-font-size: 18px;
+  --id-header-title-font-size-mobile: 16px;
+  --id-header-title-font-size-compact: 16px;
+  --id-header-title-font-weight: 600;
+  --id-header-title-color: #333;
+
+  /* Header 图标 */
+  --id-header-icon-color: #666;
+  --id-header-icon-hover-color: #1890ff;
+
+  /* Header 按钮 */
+  --id-header-button-color: #666;
+  --id-header-button-hover-bg: #f5f5f5;
+  --id-header-button-hover-color: #1890ff;
+
+  /* Header 其他 */
+  --id-header-border-radius: 8px;
+  --id-header-z-index: 1000;
+  --id-header-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --id-header-card-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Header 背景 - 暗黑模式 */
+    --id-header-bg: #1a1a1a;
+    --id-header-border-color: #2a2a2a;
+
+    /* Header 标题 - 暗黑模式 */
+    --id-header-title-color: #e0e0e0;
+
+    /* Header 图标 - 暗黑模式 */
+    --id-header-icon-color: #999;
+    --id-header-icon-hover-color: #4dabf7;
+
+    /* Header 按钮 - 暗黑模式 */
+    --id-header-button-color: #999;
+    --id-header-button-hover-bg: #2a2a2a;
+    --id-header-button-hover-color: #4dabf7;
+  }
+}
+
+/* ============================================
+   Input 组件专用变量
+=========================================== */
+:root {
+  /* Input 背景 */
+  --id-input-bg: #f7f8fa;
+  --id-input-bg-hover: #f7f8fa;
+  --id-input-bg-focus: #fff;
+  --id-input-bg-disabled: #f5f5f5;
+
+  /* Input 边框 */
+  --id-input-border-color: transparent;
+  --id-input-border-color-hover: transparent;
+  --id-input-border-color-focus: #1890ff;
+  --id-input-border-color-disabled: #d9d9d9;
+
+  /* Input 文字 */
+  --id-input-color: #333;
+  --id-input-color-placeholder: #999;
+  --id-input-color-disabled: #ccc;
+
+  /* Input 阴影 */
+  --id-input-shadow-focus: 0 0 0 2px rgba(24, 144, 255, 0.1);
+
+  /* Input 尺寸 */
+  --id-input-padding-sm: 8px 12px;
+  --id-input-padding-base: 12px 16px;
+  --id-input-padding-lg: 16px 20px;
+  --id-input-radius-sm: 8px;
+  --id-input-radius-base: 12px;
+  --id-input-radius-lg: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Input 背景 - 暗黑模式 */
+    --id-input-bg: #2a2a2a;
+    --id-input-bg-hover: #2a2a2a;
+    --id-input-bg-focus: #1a1a1a;
+    --id-input-bg-disabled: #1f1f1f;
+
+    /* Input 边框 - 暗黑模式 */
+    --id-input-border-color-disabled: #434343;
+
+    /* Input 文字 - 暗黑模式 */
+    --id-input-color: #e0e0e0;
+    --id-input-color-placeholder: #8c8c8c;
+    --id-input-color-disabled: #595959;
+  }
+}
+
+/* ============================================
+   基础重置样式
+=========================================== */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: normal;
+  padding: 0;
 }
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
+  color: var(--id-color-text);
+  background: var(--id-bg-page);
+  font-family: var(--id-font-family);
+  font-size: var(--id-font-size-base);
+  line-height: var(--id-line-height);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--id-duration-slow) var(--id-ease-in-out),
+    color var(--id-duration-slow) var(--id-ease-in-out);
+}
+
+/* ============================================
+   工具类
+=========================================== */
+/* 文本省略 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 清除浮动 */
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
 }

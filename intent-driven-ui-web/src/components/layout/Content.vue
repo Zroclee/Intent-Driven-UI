@@ -10,5 +10,6 @@
 .id-layout-content {
   flex: auto;
   min-height: 0;
+  padding: 1rem;
 }
 </style>

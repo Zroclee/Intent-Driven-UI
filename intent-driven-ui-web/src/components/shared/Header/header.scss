@@ -1,0 +1,192 @@
+// Header 组件样式
+.id-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--id-spacing-md, 12px) var(--id-spacing-lg, 16px);
+  background-color: var(--id-header-bg);
+  border-bottom: 1px solid var(--id-header-border-color);
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--id-header-height);
+  flex-shrink: 0;
+  transition:
+    background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+    border-color var(--id-duration-base, 200ms) var(--id-ease-in-out);
+
+  // Logo 容器
+  .id-header-logo-container {
+    display: flex;
+    align-items: center;
+    gap: var(--id-spacing-md, 12px);
+    flex-shrink: 0;
+    cursor: default;
+    transition: opacity var(--id-duration-slow, 300ms) var(--id-ease-out);
+
+    &.clickable {
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:active {
+        opacity: 0.6;
+      }
+    }
+
+    // Logo 图片
+    .id-header-logo {
+      height: 32px;
+      width: auto;
+      max-width: 32px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    // 标题
+    .id-header-title {
+      font-size: var(--id-header-title-font-size);
+      font-weight: var(--id-header-title-font-weight);
+      color: var(--id-header-title-color);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  // 右侧操作区域
+  .id-header-operation {
+    display: flex;
+    align-items: center;
+    gap: var(--id-spacing-lg, 16px);
+    flex-shrink: 0;
+
+    // 支持 flex 布局时子元素自动排列
+    ::v-deep(*) {
+      display: flex;
+      align-items: center;
+    }
+
+    // 图标样式
+    ::v-deep(.icon),
+    ::v-deep(i) {
+      font-size: 20px;
+      color: var(--id-header-icon-color);
+      cursor: pointer;
+      transition:
+        color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+        transform var(--id-duration-fast, 100ms) var(--id-ease-out);
+
+      &:hover {
+        color: var(--id-header-icon-hover-color);
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+
+    // 按钮样式
+    ::v-deep(button) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px var(--id-spacing-md, 12px);
+      font-size: var(--id-font-size-base, 14px);
+      border-radius: var(--id-radius-base, 4px);
+      border: 1px solid transparent;
+      background-color: transparent;
+      color: var(--id-header-button-color);
+      cursor: pointer;
+      transition: all var(--id-duration-base, 200ms) var(--id-ease-in-out);
+
+      &:hover {
+        background-color: var(--id-header-button-hover-bg);
+        color: var(--id-header-button-hover-color);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    // 下拉菜单触发器
+    ::v-deep(.dropdown-trigger) {
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .id-header {
+    padding: 10px var(--id-spacing-md, 12px);
+    height: var(--id-header-height-mobile);
+
+    .id-header-logo-container {
+      gap: var(--id-spacing-sm, 8px);
+
+      .id-header-logo {
+        height: 28px;
+        max-width: 28px;
+      }
+
+      .id-header-title {
+        font-size: var(--id-header-title-font-size-mobile);
+      }
+    }
+
+    .id-header-operation {
+      gap: var(--id-spacing-md, 12px);
+
+      ::v-deep(.icon),
+      ::v-deep(i) {
+        font-size: 18px;
+      }
+
+      ::v-deep(button) {
+        padding: 5px 10px;
+        font-size: var(--id-font-size-sm, 13px);
+      }
+    }
+  }
+}
+
+// 固定在顶部
+.id-header.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--id-header-z-index);
+  box-shadow: var(--id-header-shadow);
+}
+
+// 卡片样式（用于嵌入其他容器中）
+.id-header.card {
+  border-radius: var(--id-header-border-radius);
+  box-shadow: var(--id-header-card-shadow);
+}
+
+// 紧凑模式
+.id-header.compact {
+  height: var(--id-header-height-compact);
+  padding: var(--id-spacing-sm, 8px) var(--id-spacing-md, 12px);
+
+  .id-header-logo-container {
+    gap: var(--id-spacing-sm, 8px);
+
+    .id-header-logo {
+      height: 24px;
+      max-width: 24px;
+    }
+
+    .id-header-title {
+      font-size: var(--id-header-title-font-size-compact);
+    }
+  }
+}

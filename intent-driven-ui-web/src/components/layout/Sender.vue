@@ -6,4 +6,8 @@
 
 <script setup lang="ts"></script>
 
-<style scoped></style>
+<style scoped>
+.id-layout-sender {
+  padding: 1rem;
+}
+</style>
