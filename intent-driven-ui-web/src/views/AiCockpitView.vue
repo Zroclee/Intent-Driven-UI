@@ -1,13 +1,36 @@
 <template>
-  <div class="ai-cockpit">
-    <AiChatView />
-    <AiDynamicView />
-  </div>
+  <IdLayout>
+    <IdLayoutChat>
+      <IdLayoutHeader>
+        <button @click="togglePanel">Toggle Right Panel</button>
+      </IdLayoutHeader>
+      <IdLayoutContent></IdLayoutContent>
+      <IdLayoutSender></IdLayoutSender>
+    </IdLayoutChat>
+    <IdLayoutAside> </IdLayoutAside>
+  </IdLayout>
 </template>
 
 <script setup lang="ts">
-import { AiChatView } from './AiChatView'
-import { AiDynamicView } from './AiDynamicView'
+import { ref } from 'vue'
+import {
+  IdLayout,
+  IdLayoutChat,
+  IdLayoutHeader,
+  IdLayoutContent,
+  IdLayoutSender,
+  IdLayoutAside
+} from '@/components/layout'
+
+const showRightPanel = ref(false)
+
+const togglePanel = () => {
+  showRightPanel.value = !showRightPanel.value
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.main-container {
+  min-height: 100vh;
+}
+</style>
