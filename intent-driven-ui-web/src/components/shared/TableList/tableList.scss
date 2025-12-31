@@ -1,0 +1,76 @@
+// TableList 组件样式
+.id-table-list {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--id-table-list-bg);
+  border-radius: var(--id-table-list-border-radius);
+  transition: background-color var(--id-duration-base) var(--id-ease-in-out);
+
+  // 表格
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--id-font-size-base);
+  }
+
+  // 表头
+  &__thead {
+    background-color: var(--id-table-list-header-bg);
+    transition: background-color var(--id-duration-base) var(--id-ease-in-out);
+  }
+
+  // 表头单元格
+  &__th {
+    padding: var(--id-table-list-cell-padding);
+    text-align: left;
+    font-weight: var(--id-font-weight-semibold);
+    color: var(--id-table-list-header-color);
+    border-bottom: 2px solid var(--id-table-list-header-border-color);
+    transition: color var(--id-duration-base) var(--id-ease-in-out),
+      border-color var(--id-duration-base) var(--id-ease-in-out);
+  }
+
+  // 表体
+  &__tbody {
+    background-color: var(--id-table-list-bg);
+    transition: background-color var(--id-duration-base) var(--id-ease-in-out);
+  }
+
+  // 表格行
+  &__tr {
+    transition: background-color var(--id-duration-base) var(--id-ease-in-out);
+
+    &:hover {
+      background-color: var(--id-table-list-row-hover-bg);
+    }
+  }
+
+  // 表格单元格
+  &__td {
+    padding: var(--id-table-list-cell-padding);
+    color: var(--id-table-list-cell-color);
+    border-bottom: 1px solid var(--id-table-list-border-color);
+    transition: color var(--id-duration-base) var(--id-ease-in-out),
+      border-color var(--id-duration-base) var(--id-ease-in-out);
+  }
+
+  // 空状态
+  &__empty {
+    padding: var(--id-spacing-xxl) 0;
+    text-align: center;
+    color: var(--id-table-list-empty-color);
+    font-size: var(--id-font-size-base);
+    transition: color var(--id-duration-base) var(--id-ease-in-out);
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .id-table-list {
+    &__th,
+    &__td {
+      padding: var(--id-spacing-sm) var(--id-spacing-md);
+      font-size: var(--id-font-size-sm);
+    }
+  }
+}

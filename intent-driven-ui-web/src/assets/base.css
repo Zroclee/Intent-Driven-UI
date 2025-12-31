@@ -364,6 +364,49 @@
 }
 
 /* ============================================
+   TableList 组件专用变量
+=========================================== */
+:root {
+  /* TableList 背景 */
+  --id-table-list-bg: #ffffff;
+  --id-table-list-header-bg: #fafafa;
+  --id-table-list-row-hover-bg: #f5f5f5;
+
+  /* TableList 边框 */
+  --id-table-list-border-color: #f0f0f0;
+  --id-table-list-header-border-color: #e8e8e8;
+
+  /* TableList 文字 */
+  --id-table-list-header-color: rgba(0, 0, 0, 0.88);
+  --id-table-list-cell-color: rgba(0, 0, 0, 0.65);
+  --id-table-list-empty-color: rgba(0, 0, 0, 0.45);
+
+  /* TableList 间距 */
+  --id-table-list-cell-padding: var(--id-spacing-md) var(--id-spacing-lg);
+
+  /* TableList 圆角 */
+  --id-table-list-border-radius: var(--id-radius-base);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* TableList 背景 - 暗黑模式 */
+    --id-table-list-bg: #1f1f1f;
+    --id-table-list-header-bg: #262626;
+    --id-table-list-row-hover-bg: #2a2a2a;
+
+    /* TableList 边框 - 暗黑模式 */
+    --id-table-list-border-color: #303030;
+    --id-table-list-header-border-color: #404040;
+
+    /* TableList 文字 - 暗黑模式 */
+    --id-table-list-header-color: rgba(255, 255, 255, 0.88);
+    --id-table-list-cell-color: rgba(255, 255, 255, 0.65);
+    --id-table-list-empty-color: rgba(255, 255, 255, 0.45);
+  }
+}
+
+/* ============================================
    基础重置样式
 =========================================== */
 *,

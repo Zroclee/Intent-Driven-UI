@@ -18,6 +18,9 @@ importers:
         specifier: ^4.3.3
         version: 4.6.4(vue@3.5.26(typescript@5.4.5))
     devDependencies:
+      '@amap/amap-jsapi-loader':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@rushstack/eslint-patch':
         specifier: ^1.8.0
         version: 1.15.0
@@ -65,6 +68,9 @@ importers:
         version: 2.2.12(typescript@5.4.5)
 
 packages:
+
+  '@amap/amap-jsapi-loader@1.0.1':
+    resolution: {integrity: sha512-nPyLKt7Ow/ThHLkSvn2etQlUzqxmTVgK7bIgwdBRTg2HK5668oN7xVxkaiRe3YZEzGzfV2XgH5Jmu2T73ljejw==}
 
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
@@ -1464,6 +1470,8 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@amap/amap-jsapi-loader@1.0.1': {}
 
   '@babel/helper-string-parser@7.27.1': {}
 
