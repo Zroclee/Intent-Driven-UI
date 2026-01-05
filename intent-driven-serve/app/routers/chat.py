@@ -10,8 +10,14 @@ def read_chat_root():
 
 
 from app.agents.default import DefaultAgent
+
 @router.get("/agent")
 def read_chat_agent(query: str):
     agent = DefaultAgent()
-    agent.llm_invoke(query)
+    agent.invoke(query)
     return {"message": f"Chat agent {query} is working!"}
+
+@router.get("/agentSSE")
+def read_chat_agentSSE(query: str):
+    agent = DefaultAgent()
+    return StreamingResponse(agent.streamInvoke(query), media_type="text/event-stream")
