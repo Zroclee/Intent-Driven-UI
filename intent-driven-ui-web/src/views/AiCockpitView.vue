@@ -15,7 +15,7 @@
         <IdBubble content="Hello MateChat!" align="right" />
       </IdLayoutContent>
       <IdLayoutSender>
-        <IdInput placeholder="请输入" />
+        <IdInput placeholder="请输入" v-model="inputValue" @send="handleInputSend" />
       </IdLayoutSender>
     </IdLayoutChat>
     <IdLayoutAside :show-aside="showRightPanel">
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onUnmounted } from 'vue'
 import {
   IdLayout,
   IdLayoutChat,
@@ -40,12 +40,16 @@ import { IdInput } from '@/components/shared/Input'
 
 import { getComponentByName } from '@/components/modules/index'
 
+onUnmounted(() => {
+  // 销毁SSE
+  closeSSE()
+})
+
 const showRightPanel = ref(false)
 
 const togglePanel = () => {
   showRightPanel.value = !showRightPanel.value
 }
-
 const handleLogoClick = () => {
   console.log('Logo clicked!')
 }
@@ -54,10 +58,12 @@ const handleSettings = () => {
   console.log('Settings clicked!')
 }
 
-// const curComponent = ref('CarMap')
-// const componentProps = ref({
-//   latLng: { lat: 39.90923, lng: 116.397428 }
-// })
+const inputValue = ref('帮我查一下深圳今天的天气怎么样？有什么出行建议？')
+// 输入框发送
+const handleInputSend = (query: string) => {
+  console.log('Input send:', query)
+  connectSSE(query)
+}
 
 const curComponent = ref('CarList')
 const componentProps = ref({
@@ -95,6 +101,39 @@ const componentProps = ref({
 const loadComponent = computed(() => {
   return getComponentByName(curComponent.value)
 })
+
+const myES = ref<EventSource | null>(null)
+// SSE 请求
+const connectSSE = (query: string) => {
+  if (myES.value) {
+    console.log('SSE 已存在，请勿重复创建')
+    return
+  }
+  // URL 参数编码，防止特殊字符导致问题
+  const url = 'http://localhost:8000/chat/agentSSE?query=' + encodeURIComponent(query)
+  const es = new EventSource(url)
+
+  es.onmessage = (event) => {
+    // const data = JSON.parse(event.data)
+    console.log('Received message:', event.data)
+  }
+
+  es.onerror = (error) => {
+    console.error('SSE error:', error)
+    es.close()
+    // 重置 myES，允许重新连接
+    myES.value = null
+  }
+
+  // 保存 EventSource 实例
+  myES.value = es
+}
+const closeSSE = () => {
+  if (myES.value) {
+    myES.value.close()
+    myES.value = null
+  }
+}
 </script>
 
 <style scoped>

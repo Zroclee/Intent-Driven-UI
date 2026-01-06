@@ -7,6 +7,7 @@ from langchain_openai import ChatOpenAI
 
 from app.agents.tools.common import get_current_time
 from app.agents.tools.baidu_search import BaiduSearchTool
+from app.agents.types.streamEvent import StreamEvent
 
 all_tools = [get_current_time, BaiduSearchTool()]
 tools_by_name = {tool.name: tool for tool in all_tools}  
@@ -38,45 +39,55 @@ class DefaultAgent(BaseModel):
         
 
     def streamInvoke(self, content: str):
+        """
+        流式调用智能体，返回统一格式的事件流
+
+        事件类型:
+        - llm_start: 大模型开始生成
+        - llm_content: 大模型生成的内容片段
+        - llm_end: 大模型生成结束
+        - tool_call_start: 开始调用工具
+        - tool_output: 工具执行结果
+        - tool_call_end: 工具调用结束
+        - stream_end: 整个流结束
+        - error: 错误信息
+        """
         print(f"LLM Invoke: {content}")
-        streamRes = self.__agent.stream({"messages": [HumanMessage(content=content)]}, stream_mode='messages')
-        for chunk in streamRes:
-            # chunk 是一个元组: (AIMessageChunk, metadata_dict)
-            # print(f"------------chunk------------: {chunk}")    
-            message_chunk, metadata = chunk
-            # print(f"------------message_chunk.type------------: {message_chunk.type}")
 
-            if message_chunk.type == "tool":
-                print(f"------------tool------------: {message_chunk}")
-                yield f"tools result: {message_chunk.content}\n\n"
+        try:
+            # 发送开始事件
+            yield StreamEvent.create_start_event()
 
-            if message_chunk.type == "AIMessageChunk":
-                # print(f"------------message_chunk------------: {message_chunk}")
-                yield f"content: {message_chunk.content}\n\n"
+            stream_res = self.__agent.stream(
+                {"messages": [HumanMessage(content=content)]},
+                stream_mode='messages'
+            )
 
-                tool_calls = message_chunk.get('tool_calls')
-                if tool_calls and len(tool_calls) > 0:
-                    filtered_names = [
-                        item['name'] for item in tool_calls
-                        if item.get('id') is not None  # id存在且不为None
-                        and item.get('name') != ''     # name存在且不为空字符串
-                    ]
-                    if len(filtered_names) > 0:
-                        yield f"use tools: {', '.join(filtered_names)}\n\n"
-                    # print(f"------------tool_calls------------: {tool_calls}")
+            for chunk in stream_res:
+                # chunk 是一个元组: (message_chunk, metadata_dict)
+                message_chunk, metadata = chunk
+
+                # 使用 StreamEvent 处理 chunk，返回事件列表
+                events = StreamEvent.from_message_chunk(message_chunk, metadata)
+
+                # 逐个yield事件
+                for event in events:
+                    yield event.to_json() + "\n"
+                   
+
+            # 发送结束事件
+            yield StreamEvent.create_end_event()
+
+        except Exception as e:
+            # 错误处理
+            error_event = StreamEvent(
+                event_type=StreamEvent.StreamEventType.ERROR,
+                content=f"流式处理出错: {str(e)}",
+                metadata={"error_type": type(e).__name__}
+            )
+            yield error_event.to_json() + "\n"
+                    
          
-            
-
-            # 获取 content
-            content = message_chunk.content
-
-            # 获取 response_metadata 中的参数
-            response_metadata = message_chunk.response_metadata
-            finish_reason = response_metadata.get('finish_reason')
-
-            # 获取 langgraph 相关参数
-            langgraph_step = metadata.get('langgraph_step')
-            langgraph_node = metadata.get('langgraph_node')
         
             
     
@@ -87,10 +98,17 @@ class DefaultAgent(BaseModel):
             api_key=os.getenv("DEEPSEEK_API_KEY"),
             base_url="https://api.deepseek.com",
             temperature=0.7)
+
         # return ChatOpenAI(
         #     model="qwen3-max", 
         #     api_key=os.getenv("DASHSCOPE_API_KEY"),
         #     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        #     temperature=0.7)
+
+        # return ChatOpenAI(
+        #     model="glm-4.7", 
+        #     api_key=os.getenv("ZAI_API_KEY"),
+        #     base_url="https://open.bigmodel.cn/api/paas/v4/",
         #     temperature=0.7)
     
     # 节点 - 大模型调用节点

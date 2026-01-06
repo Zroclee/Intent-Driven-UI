@@ -10,10 +10,12 @@
 
   // 对齐方式
   &.id-bubble-left {
+    text-align: left;
     justify-content: flex-start;
   }
 
   &.id-bubble-right {
+    text-align: right;
     justify-content: flex-end;
   }
 
@@ -82,7 +84,8 @@
     word-wrap: break-word;
     word-break: break-word;
     white-space: pre-wrap;
-    transition: background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+    transition:
+      background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
       border-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
       color var(--id-duration-base, 200ms) var(--id-ease-in-out);
 
