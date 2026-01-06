@@ -127,7 +127,7 @@ class StreamEvent(BaseModel):
         return cls(
             event_type=StreamEventType.LLM_START,
             content=content
-        ).to_json() + "\n"
+        ).to_json()
 
     @classmethod
     def create_end_event(cls, content: str = "请求处理完成"):
@@ -135,5 +135,5 @@ class StreamEvent(BaseModel):
         return cls(
             event_type=StreamEventType.STREAM_END,
             content=content
-        ).to_json() + "\n"
+        ).to_json()
 

@@ -20,4 +20,10 @@ def read_chat_agent(query: str):
 @router.get("/agentSSE")
 def read_chat_agentSSE(query: str):
     agent = DefaultAgent()
-    return StreamingResponse(agent.streamInvoke(query), media_type="text/event-stream")
+    return StreamingResponse(
+            agent.streamInvoke(query),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+            })

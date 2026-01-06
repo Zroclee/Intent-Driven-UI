@@ -56,7 +56,7 @@ class DefaultAgent(BaseModel):
 
         try:
             # 发送开始事件
-            yield StreamEvent.create_start_event()
+            yield "data: " + StreamEvent.create_start_event() + "\n\n"
 
             stream_res = self.__agent.stream(
                 {"messages": [HumanMessage(content=content)]},
@@ -72,11 +72,11 @@ class DefaultAgent(BaseModel):
 
                 # 逐个yield事件
                 for event in events:
-                    yield event.to_json() + "\n"
+                    yield "data: " + event.to_json() + "\n\n"
                    
 
             # 发送结束事件
-            yield StreamEvent.create_end_event()
+            yield "data: " + StreamEvent.create_end_event() + "\n\n"
 
         except Exception as e:
             # 错误处理
@@ -85,7 +85,7 @@ class DefaultAgent(BaseModel):
                 content=f"流式处理出错: {str(e)}",
                 metadata={"error_type": type(e).__name__}
             )
-            yield error_event.to_json() + "\n"
+            yield "data: " + error_event.to_json() + "\n\n"
                     
          
         

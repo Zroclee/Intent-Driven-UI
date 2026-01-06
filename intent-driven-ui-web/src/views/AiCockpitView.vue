@@ -104,22 +104,67 @@ const loadComponent = computed(() => {
 
 const myES = ref<EventSource | null>(null)
 // SSE 请求
-const connectSSE = (query: string) => {
+const connectSSE = async (query: string) => {
   if (myES.value) {
     console.log('SSE 已存在，请勿重复创建')
     return
   }
   // URL 参数编码，防止特殊字符导致问题
   const url = 'http://localhost:8000/chat/agentSSE?query=' + encodeURIComponent(query)
+  console.log('🔗 连接 SSE:', url)
+
   const es = new EventSource(url)
 
+  // 监听连接打开事件
+  es.onopen = () => {
+    console.log('✅ SSE 连接已建立')
+  }
+
   es.onmessage = (event) => {
-    // const data = JSON.parse(event.data)
-    console.log('Received message:', event.data)
+    try {
+      console.log('📨 Raw SSE data:', event.data)
+      const data = JSON.parse(event.data)
+      console.log('📦 Parsed SSE event:', data)
+
+      // 根据事件类型处理
+      switch (data.event_type) {
+        case 'llm_start':
+          console.log('🤖 AI 开始生成:', data.content)
+          break
+        case 'llm_content':
+          console.log('💬 AI 内容:', data.content)
+          break
+        case 'llm_end':
+          console.log('✅ AI 生成完成')
+          break
+        case 'tool_call_start':
+          console.log('🔧 调用工具:', data.tool_name, data.tool_args)
+          break
+        case 'tool_output':
+          console.log('📤 工具返回:', data.content)
+          break
+        case 'tool_call_end':
+          console.log('✅ 工具调用完成')
+          break
+        case 'stream_end':
+          console.log('🏁 流结束:', data.content)
+          es.close()
+          myES.value = null
+          break
+        case 'error':
+          console.error('❌ 错误:', data.content)
+          break
+        default:
+          console.log('❓ 未知事件:', data)
+      }
+    } catch (error) {
+      console.error('❌ 解析 SSE 数据失败:', error, 'Raw data:', event.data)
+    }
   }
 
   es.onerror = (error) => {
-    console.error('SSE error:', error)
+    console.error('❌ SSE error:', error)
+    console.log('EventSource readyState:', es.readyState)
     es.close()
     // 重置 myES，允许重新连接
     myES.value = null
