@@ -19,13 +19,15 @@
       </IdLayoutSender>
     </IdLayoutChat>
     <IdLayoutAside :show-aside="showRightPanel">
-      <component :is="loadComponent" v-bind="componentProps"></component>
+      <!-- <template v-if="">
+        <component :is="loadComponent" v-bind="componentProps"></component>
+      </template> -->
     </IdLayoutAside>
   </IdLayout>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onUnmounted } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import {
   IdLayout,
   IdLayoutChat,
@@ -98,9 +100,9 @@ const componentProps = ref({
     }
   ]
 })
-const loadComponent = computed(() => {
-  return getComponentByName(curComponent.value)
-})
+const loadComponent = (name: string) => {
+  return getComponentByName(name)
+}
 
 const myES = ref<EventSource | null>(null)
 // SSE 请求
