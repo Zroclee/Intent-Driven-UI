@@ -11,5 +11,6 @@
   flex: auto;
   min-height: 0;
   padding: 1rem;
+  overflow: auto;
 }
 </style>

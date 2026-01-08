@@ -27,3 +27,14 @@ def read_chat_agentSSE(query: str):
                 "Cache-Control": "no-cache",
                 "Connection": "keep-alive",
             })
+
+@router.get("/quickStart")
+def read_chat_quickStart(query: str):
+    from app.agents.quickStart import streamInvoke
+    return StreamingResponse(
+            streamInvoke(query, "1"),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+            })

@@ -1,4 +1,5 @@
 import os, operator
+from pathlib import Path
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated, TypedDict
 from langgraph.graph import START, END, StateGraph
@@ -6,10 +7,14 @@ from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage, AI
 from langchain_openai import ChatOpenAI
 
 from app.agents.tools.common import get_current_time
-from app.agents.tools.baidu_search import BaiduSearchTool
 from app.agents.types.streamEvent import StreamEvent
+from app.agents.tools.carTools import get_car_info, get_car_list, get_car_trajectory_list
 
-all_tools = [get_current_time, BaiduSearchTool()]
+# 加载车辆金融风控智能体提示词
+PROMPT_FILE_PATH = Path(__file__).parent / "prompts" / "carManager.md"
+CAR_MANAGER_PROMPT = PROMPT_FILE_PATH.read_text(encoding='utf-8')
+
+all_tools = [get_current_time, get_car_info, get_car_list, get_car_trajectory_list]
 tools_by_name = {tool.name: tool for tool in all_tools}  
 
 # 定义状态
@@ -17,8 +22,9 @@ class MessageState(TypedDict):
     """
     State
     """
-    messages: Annotated[list[AnyMessage], operator.add, Field(..., description="Message")]
-    name: Annotated[str,Field(..., description="Name")]
+    messages: Annotated[list[AnyMessage], operator.add, Field(..., description="Messages")]
+
+
 
 # default agent
 class DefaultAgent(BaseModel):
@@ -116,10 +122,13 @@ class DefaultAgent(BaseModel):
         '''
         __call_llm
         '''
-        
+        human = """
+            测试
+        """
         res = self.__llm.invoke([
-            SystemMessage(content="你是一个智能助理，可以调用工具来帮助用户完成任务。"),
-            ]+state["messages"])
+            SystemMessage(content=CAR_MANAGER_PROMPT),
+            HumanMessage(content=human)
+            ])
         return {
             "messages":[res],
         }
