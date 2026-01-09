@@ -1,2 +1,2 @@
-import IdBubble from './Bubble.vue'
-export { IdBubble }
+import IdBubble, { type StepJsonData } from './Bubble.vue'
+export { IdBubble, type StepJsonData }

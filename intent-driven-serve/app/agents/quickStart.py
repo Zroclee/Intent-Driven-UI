@@ -9,7 +9,7 @@ from app.agents.tools.carTools import get_car_info, get_car_list, get_car_trajec
 
 import app.agents.prompts as prompts
 
-from app.agents.types.streamEvent import StreamEvent
+from app.agents.types.streamEvent import StreamEvent, StreamEventType
 
 model = ChatOpenAI(
             model="deepseek-chat", 
@@ -26,7 +26,7 @@ agent = create_agent(
 )
 
 
-async def streamInvoke(query: str, thread_id: str):
+def streamInvoke(query: str, thread_id: str):
     try:
         yield "data: " + StreamEvent.create_start_event() + "\n\n"
         res = agent.stream({"messages": [
@@ -45,7 +45,7 @@ async def streamInvoke(query: str, thread_id: str):
     except Exception as e:
         # pass
         error_event = StreamEvent(
-            event_type=StreamEvent.StreamEventType.ERROR,
+            event_type=StreamEventType.ERROR,
             content=f"流式处理出错: {str(e)}",
             metadata={"error_type": type(e).__name__}
         )

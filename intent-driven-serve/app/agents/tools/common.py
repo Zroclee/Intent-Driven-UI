@@ -1,5 +1,6 @@
 from langchain_core.tools import tool
 from datetime import datetime, timezone
+import json
 
 
 # 获取当前时间
@@ -15,5 +16,10 @@ def get_current_time(fmt: str = "%Y-%m-%d %H:%M:%S", tz: str = "local") -> str:
         dt = datetime.now(timezone.utc)
     else:
         dt = datetime.now()
-    return dt.strftime(fmt)
+
+    dt_str = {
+        "code": 200,
+        "data": dt.strftime(fmt)
+    }
+    return json.dumps(dt_str)
 

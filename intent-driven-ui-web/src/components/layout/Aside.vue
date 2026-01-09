@@ -15,11 +15,10 @@ defineProps({
 
 <style scoped>
 .id-layout-aside {
-  width: 0;
-  display: flex;
-  flex-direction: column;
+  width: 50%;
+  height: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: auto;
 }
 .id-layout-aside--visible {
   width: 50%;

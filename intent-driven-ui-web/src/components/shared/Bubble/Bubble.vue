@@ -29,8 +29,24 @@
       </div>
 
       <!-- Bubble Content -->
-      <div v-else class="id-bubble-content" :class="`variant-${variant}`">
+      <div
+        v-if="content && content.length !== 0"
+        class="id-bubble-content"
+        :class="`variant-${variant}`"
+      >
         {{ content }}
+      </div>
+
+      <!-- Steps Content -->
+      <div v-if="steps" class="id-bubble-steps id-bubble-content variant-filled">
+        <div v-for="(step, index) in steps" :key="index">
+          <div v-if="isStepJsonButton(step)" class="id-bubble-step-button">
+            <button class="id-bubble-action-btn" @click="handleStepClick(step)">
+              {{ getStepButtonLabel(step) }}
+            </button>
+          </div>
+          <div v-else class="id-bubble-step-content">{{ step }}</div>
+        </div>
       </div>
 
       <!-- Suffix Slot -->
@@ -50,15 +66,23 @@ interface AvatarConfig {
   size?: string
 }
 
+export interface StepJsonData {
+  code: number
+  data: unknown
+  componentName: string
+}
+
 const props = withDefaults(
   defineProps<{
     content?: string
+    steps?: { [key: string]: string } | null
     align?: 'left' | 'right'
     variant?: 'filled' | 'bordered' | 'none'
     loading?: boolean
     avatarConfig?: AvatarConfig
   }>(),
   {
+    steps: null,
     content: '',
     align: 'left',
     variant: 'filled',
@@ -66,6 +90,10 @@ const props = withDefaults(
     avatarConfig: undefined
   }
 )
+
+const emit = defineEmits<{
+  stepClick: [data: StepJsonData]
+}>()
 
 const bubbleClass = computed(() => {
   return [
@@ -83,6 +111,38 @@ const avatarStyle = computed(() => {
     borderRadius: '100%'
   }
 })
+
+const isStepJsonButton = (step: string): boolean => {
+  try {
+    const parsed = JSON.parse(step) as StepJsonData
+    return !!(
+      parsed.code === 200 &&
+      parsed.componentName &&
+      parsed.componentName.length > 0 &&
+      (Array.isArray(parsed.data) || typeof parsed.data === 'object')
+    )
+  } catch {
+    return false
+  }
+}
+
+const getStepButtonLabel = (step: string): string => {
+  try {
+    const parsed = JSON.parse(step) as StepJsonData
+    return parsed.componentName || '操作'
+  } catch {
+    return '操作'
+  }
+}
+
+const handleStepClick = (step: string) => {
+  try {
+    const parsed = JSON.parse(step) as StepJsonData
+    emit('stepClick', parsed)
+  } catch (error) {
+    console.error('Failed to parse step data:', error)
+  }
+}
 </script>
 
 <style scoped src="./bubble.scss"></style>

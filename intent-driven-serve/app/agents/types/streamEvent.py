@@ -136,4 +136,12 @@ class StreamEvent(BaseModel):
             event_type=StreamEventType.STREAM_END,
             content=content
         ).to_json()
+    
+    @classmethod
+    def create_error_event(cls, content: str = "请求处理完成"):
+        """创建流结束事件"""
+        return cls(
+            event_type=StreamEventType.ERROR,
+            content=content
+        ).to_json()
 
