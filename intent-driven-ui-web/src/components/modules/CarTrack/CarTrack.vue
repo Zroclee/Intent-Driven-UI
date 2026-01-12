@@ -1,6 +1,6 @@
 <template>
-  <div class="car-map-container">
-    <Amap class="amap" my-id="car-map" ref="amapRef"></Amap>
+  <div class="car-track-container">
+    <Amap class="amap" my-id="car-track" ref="amapRef"></Amap>
   </div>
 </template>
 
@@ -14,20 +14,26 @@ export interface TypeLatLng {
 const amapRef = useTemplateRef('amapRef')
 const myProps = defineProps({
   data: {
-    type: Object,
+    type: Array,
     default: null
   }
 })
 
 onMounted(() => {
-  if (amapRef.value) {
-    amapRef.value.add_marker(myProps.data.longitude, myProps.data.latitude)
+  if (amapRef.value && myProps.data && myProps.data.length > 0) {
+    const tracks = myProps.data.map((item: any) => {
+      return {
+        lng: item.longitude,
+        lat: item.latitude
+      }
+    })
+    amapRef.value.add_track(tracks)
   }
 })
 </script>
 
 <style scoped lang="scss">
-.car-map-container {
+.car-track-container {
   width: 100%;
   height: 400px;
   .amap {

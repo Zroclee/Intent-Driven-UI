@@ -25,14 +25,14 @@
       </IdLayoutSender>
     </IdLayoutChat>
     <IdLayoutAside :show-aside="showRightPanel">
-      <template v-if="allComponents && allComponents.length > 0">
-        <component
-          v-for="(item, index) in allComponents"
-          :key="'conponent' + item.componentName + index"
-          :is="loadComponent(item.componentName)"
-          v-bind="{ data: item.data }"
-        ></component>
-      </template>
+      <div v-if="allComponents && allComponents.length > 0">
+        <div v-for="(item, index) in allComponents" :key="'conponent' + item.componentName + index">
+          <component
+            :is="loadComponent(item.componentName)"
+            v-bind="{ data: item.data }"
+          ></component>
+        </div>
+      </div>
     </IdLayoutAside>
   </IdLayout>
 </template>
@@ -99,223 +99,223 @@ const handleBubbleStepClick = (stepData: StepJsonData) => {
 }
 
 const allComponents = ref<any[]>([
-  { code: 200, data: '2026-01-09 14:28:16' },
-  {
-    code: 200,
-    data: {
-      car_id: 'CAR_1ECB4FB3',
-      car_name: '蔚来ES6',
-      car_number: '粤B12345',
-      status: '离线',
-      latitude: 22.551274,
-      longitude: 114.120646,
-      location_time: '2026-01-09 14:17:20',
-      location_area: '罗湖区'
-    },
-    componentName: 'CarMap'
-  },
-  {
-    code: 200,
-    data: [
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_001',
-        latitude: 22.54658,
-        longitude: 114.115933,
-        time: '2026-01-09 12:28:24',
-        location_area: '罗湖区',
-        sequence: 1
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_002',
-        latitude: 22.56063,
-        longitude: 114.129984,
-        time: '2026-01-09 12:37:24',
-        location_area: '罗湖区',
-        sequence: 2
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_003',
-        latitude: 22.55557,
-        longitude: 114.116337,
-        time: '2026-01-09 12:38:24',
-        location_area: '罗湖区',
-        sequence: 3
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_004',
-        latitude: 22.552701,
-        longitude: 114.102123,
-        time: '2026-01-09 12:46:24',
-        location_area: '罗湖区',
-        sequence: 4
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_005',
-        latitude: 22.552025,
-        longitude: 114.109723,
-        time: '2026-01-09 13:00:24',
-        location_area: '罗湖区',
-        sequence: 5
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_006',
-        latitude: 22.550944,
-        longitude: 114.106112,
-        time: '2026-01-09 12:58:24',
-        location_area: '罗湖区',
-        sequence: 6
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_007',
-        latitude: 22.556524,
-        longitude: 114.111534,
-        time: '2026-01-09 13:10:24',
-        location_area: '罗湖区',
-        sequence: 7
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_008',
-        latitude: 22.566125,
-        longitude: 114.104274,
-        time: '2026-01-09 13:10:24',
-        location_area: '罗湖区',
-        sequence: 8
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_009',
-        latitude: 22.546491,
-        longitude: 114.122051,
-        time: '2026-01-09 13:32:24',
-        location_area: '罗湖区',
-        sequence: 9
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_010',
-        latitude: 22.535823,
-        longitude: 114.103694,
-        time: '2026-01-09 13:13:24',
-        location_area: '罗湖区',
-        sequence: 10
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_011',
-        latitude: 22.531707,
-        longitude: 114.088773,
-        time: '2026-01-09 13:08:24',
-        location_area: '福田区',
-        sequence: 11
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_012',
-        latitude: 22.534322,
-        longitude: 114.094667,
-        time: '2026-01-09 13:34:24',
-        location_area: '福田区',
-        sequence: 12
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_013',
-        latitude: 22.519217,
-        longitude: 114.101706,
-        time: '2026-01-09 13:40:24',
-        location_area: '罗湖区',
-        sequence: 13
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_014',
-        latitude: 22.512265,
-        longitude: 114.094278,
-        time: '2026-01-09 13:07:24',
-        location_area: '福田区',
-        sequence: 14
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_015',
-        latitude: 22.534022,
-        longitude: 114.109865,
-        time: '2026-01-09 13:52:24',
-        location_area: '罗湖区',
-        sequence: 15
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_016',
-        latitude: 22.543561,
-        longitude: 114.09751,
-        time: '2026-01-09 14:28:24',
-        location_area: '罗湖区',
-        sequence: 16
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_017',
-        latitude: 22.544935,
-        longitude: 114.088925,
-        time: '2026-01-09 13:16:24',
-        location_area: '福田区',
-        sequence: 17
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_018',
-        latitude: 22.528755,
-        longitude: 114.108069,
-        time: '2026-01-09 15:01:24',
-        location_area: '罗湖区',
-        sequence: 18
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_019',
-        latitude: 22.532679,
-        longitude: 114.09574,
-        time: '2026-01-09 14:34:24',
-        location_area: '罗湖区',
-        sequence: 19
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_020',
-        latitude: 22.516658,
-        longitude: 114.090282,
-        time: '2026-01-09 14:22:24',
-        location_area: '福田区',
-        sequence: 20
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_021',
-        latitude: 22.536581,
-        longitude: 114.078517,
-        time: '2026-01-09 13:48:24',
-        location_area: '福田区',
-        sequence: 21
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_022',
-        latitude: 22.5395,
-        longitude: 114.062097,
-        time: '2026-01-09 14:55:24',
-        location_area: '福田区',
-        sequence: 22
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_023',
-        latitude: 22.548584,
-        longitude: 114.063213,
-        time: '2026-01-09 15:46:24',
-        location_area: '福田区',
-        sequence: 23
-      },
-      {
-        trajectory_id: 'TRJ_CAR_1ECB4FB3_024',
-        latitude: 22.532774,
-        longitude: 114.076383,
-        time: '2026-01-09 14:46:24',
-        location_area: '福田区',
-        sequence: 24
-      }
-    ],
-    total: 24,
-    car_number: '粤B12345',
-    start_time: '2026-01-09 12:28:24',
-    end_time: '2026-01-09 14:46:24',
-    componentName: 'CarTrajectory'
-  }
+  // { code: 200, data: '2026-01-09 14:28:16' },
+  // {
+  //   code: 200,
+  //   data: {
+  //     car_id: 'CAR_1ECB4FB3',
+  //     car_name: '蔚来ES6',
+  //     car_number: '粤B12345',
+  //     status: '离线',
+  //     latitude: 22.551274,
+  //     longitude: 114.120646,
+  //     location_time: '2026-01-09 14:17:20',
+  //     location_area: '罗湖区'
+  //   },
+  //   componentName: 'CarMap'
+  // },
+  // {
+  //   code: 200,
+  //   data: [
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_001',
+  //       latitude: 22.54658,
+  //       longitude: 114.115933,
+  //       time: '2026-01-09 12:28:24',
+  //       location_area: '罗湖区',
+  //       sequence: 1
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_002',
+  //       latitude: 22.56063,
+  //       longitude: 114.129984,
+  //       time: '2026-01-09 12:37:24',
+  //       location_area: '罗湖区',
+  //       sequence: 2
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_003',
+  //       latitude: 22.55557,
+  //       longitude: 114.116337,
+  //       time: '2026-01-09 12:38:24',
+  //       location_area: '罗湖区',
+  //       sequence: 3
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_004',
+  //       latitude: 22.552701,
+  //       longitude: 114.102123,
+  //       time: '2026-01-09 12:46:24',
+  //       location_area: '罗湖区',
+  //       sequence: 4
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_005',
+  //       latitude: 22.552025,
+  //       longitude: 114.109723,
+  //       time: '2026-01-09 13:00:24',
+  //       location_area: '罗湖区',
+  //       sequence: 5
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_006',
+  //       latitude: 22.550944,
+  //       longitude: 114.106112,
+  //       time: '2026-01-09 12:58:24',
+  //       location_area: '罗湖区',
+  //       sequence: 6
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_007',
+  //       latitude: 22.556524,
+  //       longitude: 114.111534,
+  //       time: '2026-01-09 13:10:24',
+  //       location_area: '罗湖区',
+  //       sequence: 7
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_008',
+  //       latitude: 22.566125,
+  //       longitude: 114.104274,
+  //       time: '2026-01-09 13:10:24',
+  //       location_area: '罗湖区',
+  //       sequence: 8
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_009',
+  //       latitude: 22.546491,
+  //       longitude: 114.122051,
+  //       time: '2026-01-09 13:32:24',
+  //       location_area: '罗湖区',
+  //       sequence: 9
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_010',
+  //       latitude: 22.535823,
+  //       longitude: 114.103694,
+  //       time: '2026-01-09 13:13:24',
+  //       location_area: '罗湖区',
+  //       sequence: 10
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_011',
+  //       latitude: 22.531707,
+  //       longitude: 114.088773,
+  //       time: '2026-01-09 13:08:24',
+  //       location_area: '福田区',
+  //       sequence: 11
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_012',
+  //       latitude: 22.534322,
+  //       longitude: 114.094667,
+  //       time: '2026-01-09 13:34:24',
+  //       location_area: '福田区',
+  //       sequence: 12
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_013',
+  //       latitude: 22.519217,
+  //       longitude: 114.101706,
+  //       time: '2026-01-09 13:40:24',
+  //       location_area: '罗湖区',
+  //       sequence: 13
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_014',
+  //       latitude: 22.512265,
+  //       longitude: 114.094278,
+  //       time: '2026-01-09 13:07:24',
+  //       location_area: '福田区',
+  //       sequence: 14
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_015',
+  //       latitude: 22.534022,
+  //       longitude: 114.109865,
+  //       time: '2026-01-09 13:52:24',
+  //       location_area: '罗湖区',
+  //       sequence: 15
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_016',
+  //       latitude: 22.543561,
+  //       longitude: 114.09751,
+  //       time: '2026-01-09 14:28:24',
+  //       location_area: '罗湖区',
+  //       sequence: 16
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_017',
+  //       latitude: 22.544935,
+  //       longitude: 114.088925,
+  //       time: '2026-01-09 13:16:24',
+  //       location_area: '福田区',
+  //       sequence: 17
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_018',
+  //       latitude: 22.528755,
+  //       longitude: 114.108069,
+  //       time: '2026-01-09 15:01:24',
+  //       location_area: '罗湖区',
+  //       sequence: 18
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_019',
+  //       latitude: 22.532679,
+  //       longitude: 114.09574,
+  //       time: '2026-01-09 14:34:24',
+  //       location_area: '罗湖区',
+  //       sequence: 19
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_020',
+  //       latitude: 22.516658,
+  //       longitude: 114.090282,
+  //       time: '2026-01-09 14:22:24',
+  //       location_area: '福田区',
+  //       sequence: 20
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_021',
+  //       latitude: 22.536581,
+  //       longitude: 114.078517,
+  //       time: '2026-01-09 13:48:24',
+  //       location_area: '福田区',
+  //       sequence: 21
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_022',
+  //       latitude: 22.5395,
+  //       longitude: 114.062097,
+  //       time: '2026-01-09 14:55:24',
+  //       location_area: '福田区',
+  //       sequence: 22
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_023',
+  //       latitude: 22.548584,
+  //       longitude: 114.063213,
+  //       time: '2026-01-09 15:46:24',
+  //       location_area: '福田区',
+  //       sequence: 23
+  //     },
+  //     {
+  //       trajectory_id: 'TRJ_CAR_1ECB4FB3_024',
+  //       latitude: 22.532774,
+  //       longitude: 114.076383,
+  //       time: '2026-01-09 14:46:24',
+  //       location_area: '福田区',
+  //       sequence: 24
+  //     }
+  //   ],
+  //   total: 24,
+  //   car_number: '粤B12345',
+  //   start_time: '2026-01-09 12:28:24',
+  //   end_time: '2026-01-09 14:46:24',
+  //   componentName: 'CarTrack'
+  // }
 ])
 
 const curComponent = ref('CarMap')
