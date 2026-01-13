@@ -25,13 +25,8 @@
       </IdLayoutSender>
     </IdLayoutChat>
     <IdLayoutAside :show-aside="showRightPanel">
-      <div v-if="allComponents && allComponents.length > 0">
-        <div v-for="(item, index) in allComponents" :key="'conponent' + item.componentName + index">
-          <component
-            :is="loadComponent(item.componentName)"
-            v-bind="{ data: item.data }"
-          ></component>
-        </div>
+      <div v-for="(item, index) in allComponents" :key="'conponent' + item.componentName + index">
+        <component :is="loadComponent(item.componentName)" v-bind="{ data: item.data }"></component>
       </div>
     </IdLayoutAside>
   </IdLayout>
@@ -414,7 +409,7 @@ const connectSSE = async (query: string) => {
           break
         case 'tool_output':
           console.log('📤 工具返回:', data.content)
-          allComponents.value.push(data.content)
+          allComponents.value.push(JSON.parse(data.content))
           content += data.content
           break
         case 'tool_call_end':

@@ -6,36 +6,52 @@
   width: 100%;
   box-sizing: border-box;
 
-  // 输入框包装器
-  .input-wrapper {
+  // 整体边框、背景和阴影效果
+  .id-input-content {
     position: relative;
     display: flex;
     align-items: flex-end;
     gap: 8px;
     width: 100%;
+    padding: var(--id-input-padding-base, 8px 12px);
+    background-color: var(--id-input-bg, #ffffff);
+    border: 1px solid var(--id-input-border-color, #d9d9d9);
+    border-radius: var(--id-input-radius-base, 8px);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.03),
+      0 2px 8px rgba(0, 0, 0, 0.04),
+      0 4px 16px rgba(0, 0, 0, 0.02);
+    transition:
+      background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      border-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
+      box-shadow var(--id-duration-base, 200ms) var(--id-ease-in-out);
+
+    // 聚焦状态 - 整体高亮
+    &:focus-within {
+      border-color: var(--id-input-border-color-focus, #1890ff);
+      box-shadow:
+        0 0 0 2px rgba(24, 144, 255, 0.1),
+        0 2px 8px rgba(24, 144, 255, 0.15),
+        0 4px 16px rgba(24, 144, 255, 0.08);
+    }
   }
 
-  // Textarea 基础样式
+  // Textarea 基础样式 - 无独立边框
   textarea {
     flex: 1;
     width: 100%;
     min-height: 24px;
     max-height: 200px;
-    padding: var(--id-input-padding-base);
+    padding: 0;
     font-size: var(--id-font-size-base, 14px);
     line-height: var(--id-line-height, 1.5715);
-    color: var(--id-input-color);
-    background-color: var(--id-input-bg);
-    border: 1px solid var(--id-input-border-color);
-    border-radius: var(--id-input-radius-base);
+    color: var(--id-input-color, rgba(0, 0, 0, 0.85));
+    background-color: transparent;
+    border: none;
     outline: none;
     resize: none;
     overflow-y: auto;
     box-sizing: border-box;
-    transition: background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
-      border-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
-      color var(--id-duration-base, 200ms) var(--id-ease-in-out),
-      box-shadow var(--id-duration-base, 200ms) var(--id-ease-in-out);
 
     // 滚动条样式
     &::-webkit-scrollbar {
@@ -43,7 +59,7 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background-color: var(--id-color-border);
+      background-color: var(--id-color-border, rgba(0, 0, 0, 0.15));
       border-radius: var(--id-radius-base, 4px);
     }
 
@@ -53,114 +69,117 @@
 
     // 占位符样式
     &::placeholder {
-      color: var(--id-input-color-placeholder);
+      color: var(--id-input-color-placeholder, rgba(0, 0, 0, 0.25));
       font-size: var(--id-font-size-base, 14px);
-    }
-
-    // 聚焦状态
-    &:focus {
-      background-color: var(--id-input-bg-focus);
-      border-color: var(--id-input-border-color-focus);
-      box-shadow: var(--id-input-shadow-focus);
     }
 
     // 禁用状态
     &:disabled {
-      background-color: var(--id-input-bg-disabled);
-      color: var(--id-input-color-disabled);
       cursor: not-allowed;
       resize: none;
     }
 
     // 只读状态
     &:read-only {
-      background-color: var(--id-bg-component);
       cursor: default;
     }
   }
 
   // 尺寸变体
   &.size-small {
+    .id-input-content {
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
     textarea {
-      padding: var(--id-input-padding-sm);
       font-size: var(--id-font-size-sm, 13px);
-      border-radius: var(--id-input-radius-sm);
     }
   }
 
   &.size-large {
+    .id-input-content {
+      padding: 12px 16px;
+      border-radius: 12px;
+    }
+
     textarea {
-      padding: var(--id-input-padding-lg);
       font-size: var(--id-font-size-lg, 16px);
-      border-radius: var(--id-input-radius-lg);
     }
   }
 
   // 变体样式
   &.variant-filled {
-    textarea {
-      background-color: var(--id-bg-page-container);
+    .id-input-content {
+      background-color: var(--id-bg-page-container, #f5f5f5);
 
-      &:focus {
-        background-color: var(--id-bg-component);
+      &:focus-within {
+        background-color: var(--id-bg-component, #ffffff);
       }
     }
   }
 
   &.variant-outlined {
-    textarea {
+    .id-input-content {
       background-color: transparent;
-      border-color: var(--id-color-border);
+      border-color: var(--id-color-border, #d9d9d9);
 
-      &:focus {
-        background-color: var(--id-bg-component);
-        border-color: var(--id-color-primary);
+      &:focus-within {
+        background-color: var(--id-bg-component, #ffffff);
+        border-color: var(--id-color-primary, #1890ff);
       }
     }
   }
 
   // 状态变体
   &.status-error {
-    textarea {
-      border-color: var(--id-color-error);
+    .id-input-content {
+      border-color: var(--id-color-error, #ff4d4f);
 
-      &:focus {
-        border-color: var(--id-color-error);
-        box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+      &:focus-within {
+        border-color: var(--id-color-error, #ff4d4f);
+        box-shadow:
+          0 0 0 2px rgba(255, 77, 79, 0.1),
+          0 2px 8px rgba(255, 77, 79, 0.15);
       }
     }
   }
 
   &.status-warning {
-    textarea {
-      border-color: var(--id-color-warning);
+    .id-input-content {
+      border-color: var(--id-color-warning, #faad14);
 
-      &:focus {
-        border-color: var(--id-color-warning);
-        box-shadow: 0 0 0 2px rgba(250, 173, 20, 0.1);
+      &:focus-within {
+        border-color: var(--id-color-warning, #faad14);
+        box-shadow:
+          0 0 0 2px rgba(250, 173, 20, 0.1),
+          0 2px 8px rgba(250, 173, 20, 0.15);
       }
     }
   }
 
   &.status-success {
-    textarea {
-      border-color: var(--id-color-success);
+    .id-input-content {
+      border-color: var(--id-color-success, #52c41a);
 
-      &:focus {
-        border-color: var(--id-color-success);
-        box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.1);
+      &:focus-within {
+        border-color: var(--id-color-success, #52c41a);
+        box-shadow:
+          0 0 0 2px rgba(82, 196, 26, 0.1),
+          0 2px 8px rgba(82, 196, 26, 0.15);
       }
     }
   }
 
   // 无边框变体
   &.borderless {
-    textarea {
+    .id-input-content {
       background-color: transparent;
       border: none;
+      box-shadow: none;
       padding: var(--id-spacing-md, 12px) 0;
 
-      &:focus {
+      &:focus-within {
         background-color: transparent;
         box-shadow: none;
       }
@@ -170,27 +189,32 @@
   // 发送按钮样式
   .send-button {
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--id-color-primary, #1890ff);
+    background: linear-gradient(135deg, var(--id-color-primary, #1890ff) 0%, #096dd9 100%);
     border: none;
-    border-radius: 50%;
+    border-radius: 8px;
     cursor: pointer;
     color: white;
     transition: all var(--id-duration-base, 200ms) var(--id-ease-in-out);
+    box-shadow:
+      0 2px 4px rgba(24, 144, 255, 0.2),
+      0 1px 2px rgba(0, 0, 0, 0.05);
 
     svg {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      transition: transform var(--id-duration-base, 200ms) var(--id-ease-in-out);
     }
 
     // 加载动画样式
     .loading-icon {
       animation: spin 1s linear infinite;
-      opacity: 0.8;
+      opacity: 0.9;
     }
 
     @keyframes spin {
@@ -203,21 +227,41 @@
     }
 
     &:hover:not(.disabled) {
-      background-color: var(--id-color-primary-hover, #40a9ff);
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+      background: linear-gradient(135deg, var(--id-color-primary-hover, #40a9ff) 0%, #1890ff 100%);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow:
+        0 4px 12px rgba(24, 144, 255, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.1);
+
+      svg {
+        transform: translateX(2px);
+      }
     }
 
     &:active:not(.disabled) {
-      transform: translateY(0);
-      box-shadow: 0 1px 4px rgba(24, 144, 255, 0.2);
+      transform: translateY(0) scale(1);
+      box-shadow:
+        0 2px 6px rgba(24, 144, 255, 0.25),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+
+      svg {
+        transform: translateX(0);
+      }
     }
 
     &.disabled {
-      background-color: var(--id-color-border, #d9d9d9);
+      background: linear-gradient(135deg, #d9d9d9 0%, #bfbfbf 100%);
       cursor: not-allowed;
-      opacity: 0.5;
+      opacity: 0.6;
+      box-shadow: none;
+
+      &:hover {
+        transform: none;
+
+        svg {
+          transform: none;
+        }
+      }
     }
   }
 }
-

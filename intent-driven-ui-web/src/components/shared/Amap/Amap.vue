@@ -43,7 +43,9 @@ const add_track = (tracks: { lng: number; lat: number }[]) => {
     })
     // 添加轨迹对象到地图上
     myAmap.add(polyline)
+
     // 设置地图的显示范围
+    myAmap.setFitView()
   } else {
     // 地图未加载，缓存标记数据
     cacheList.push({ funcName: 'add_track', args: tracks })

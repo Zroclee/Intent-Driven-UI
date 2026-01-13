@@ -312,7 +312,7 @@ def get_car_trajectory_list(car_number: str) -> str:
         "car_number": car_number,
         "start_time": trajectory_list[0]['time'] if trajectory_list else None,
         "end_time": trajectory_list[-1]['time'] if trajectory_list else None,
-        "componentName": 'CarTrajectory'
+        "componentName": 'CarTrack'
     }
 
     return json.dumps(result, ensure_ascii=False, indent=2)
