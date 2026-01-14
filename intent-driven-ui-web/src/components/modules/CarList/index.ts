@@ -1,5 +1,5 @@
 import CarList, { type CarListProps } from './CarList.vue'
-export { CarList }
+export { CarList, type CarListProps }
 
 import { defineAsyncComponent } from 'vue'
 
