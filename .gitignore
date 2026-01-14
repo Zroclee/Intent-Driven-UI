@@ -34,3 +34,7 @@ __pycache__/
 .venv/
 venv/
 .env
+
+# docs
+*/docs/.vitepress/cache/
+*/docs/.vitepress/dist/
