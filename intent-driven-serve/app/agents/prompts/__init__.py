@@ -33,4 +33,4 @@ def load_prompt_from_markdown(file_name=None, file_path=None):
 # 预加载默认RAG提示词
 carManager = load_prompt_from_markdown(file_name="carManager")
 agriculture_manager = load_prompt_from_markdown(file_name="agriculture_manager")
-
+core_manager = load_prompt_from_markdown(file_name="core_manager")
