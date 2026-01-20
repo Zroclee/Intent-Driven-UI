@@ -80,7 +80,7 @@ def get_monitor_status(base_name: str, monitor_type: str) -> str:
         return "离线"
 
 
-@tool('get_weather_monitor', description='获取气象监测数据')
+@tool('get_weather_monitor', description='获取气象监测数据, 支持：智慧茶园、芒果园、油橄榄基地')
 def get_weather_monitor(base_name: str) -> str:
     """获取气象监测数据。
 
@@ -144,13 +144,13 @@ def get_weather_monitor(base_name: str) -> str:
             "update_time": update_time,
             "monitor_status": monitor_status
         },
-        "componentName": "WeatherMonitor"
+        "componentName": "FarmingWeather"
     }
 
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
-@tool('get_soil_monitor', description='获取土壤监测数据')
+@tool('get_soil_monitor', description='获取土壤监测数据，支持：智慧茶园、芒果园、油橄榄基地')
 def get_soil_monitor(base_name: str) -> str:
     """获取土壤监测数据。
 
@@ -172,7 +172,7 @@ def get_soil_monitor(base_name: str) -> str:
             "update_time": "数据更新时间",
             "monitor_status": "监测状态（正常/异常/离线）"
         },
-        "componentName": "SoilMonitor"
+        "componentName": "FarmingSoil"
     }
     """
     base_info = get_base_info(base_name)
@@ -214,13 +214,13 @@ def get_soil_monitor(base_name: str) -> str:
             "update_time": update_time,
             "monitor_status": monitor_status
         },
-        "componentName": "SoilMonitor"
+        "componentName": "FarmingSoil"
     }
 
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
-@tool('get_water_quality_monitor', description='获取水质监测数据')
+@tool('get_water_quality_monitor', description='获取水质监测数据，仅支持油橄榄基地')
 def get_water_quality_monitor(base_name: str) -> str:
     """获取水质监测数据（仅油橄榄基地支持）。
 
@@ -241,7 +241,7 @@ def get_water_quality_monitor(base_name: str) -> str:
             "update_time": "数据更新时间",
             "monitor_status": "监测状态（正常/异常/离线）"
         },
-        "componentName": "WaterQualityMonitor"
+        "componentName": "FarmingWater"
     }
     """
     if base_name != "油橄榄基地":
@@ -282,13 +282,13 @@ def get_water_quality_monitor(base_name: str) -> str:
             "update_time": update_time,
             "monitor_status": monitor_status
         },
-        "componentName": "WaterQualityMonitor"
+        "componentName": "FarmingWater"
     }
 
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
-@tool('get_device_list', description='获取设备列表')
+@tool('get_device_list', description='获取设备列表，支持：智慧茶园、芒果园、油橄榄基地')
 def get_device_list(base_name: str) -> str:
     """获取设备列表。
 
@@ -310,7 +310,7 @@ def get_device_list(base_name: str) -> str:
         ],
         "total": "设备总数",
         "base_name": "基地名称",
-        "componentName": "DeviceList"
+        "componentName": "FarmingDevice"
     }
     """
     base_info = get_base_info(base_name)
@@ -365,7 +365,7 @@ def get_device_list(base_name: str) -> str:
         "data": device_list,
         "total": len(device_list),
         "base_name": base_name,
-        "componentName": "DeviceList"
+        "componentName": "FarmingDevice"
     }
 
     return json.dumps(result, ensure_ascii=False, indent=2)
@@ -470,7 +470,7 @@ def get_cattle_list(base_name: str = "智慧肉牛基地") -> str:
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
-@tool('get_monitor_video', description='获取监控视频链接')
+@tool('get_monitor_video', description='获取监控视频链接, 支持：智慧茶园、芒果园、智慧肉牛基地')
 def get_monitor_video(base_name: str) -> str:
     """获取监控视频链接。
 
@@ -480,14 +480,20 @@ def get_monitor_video(base_name: str) -> str:
     返回格式：
     {
         "code": 200,
-        "data": {
-            "base_name": "基地名称",
-            "video_url": "监控视频链接",
-            "stream_url": "实时流媒体地址",
-            "update_time": "视频更新时间",
-            "camera_count": "摄像头数量"
-        },
-        "componentName": "MonitorVideo"
+        "data": [
+            {
+                "camera_id": "摄像头ID",
+                "camera_name": "摄像头名称",
+                "camera_type": "摄像头类型（球机/枪机/半球）",
+                "location": "安装位置",
+                "video_url": "监控视频链接",
+                "stream_url": "实时流媒体地址",
+                "status": "状态（在线/离线）",
+                "last_active_time": "最后活跃时间",
+                "resolution": "分辨率"
+            }
+        ],
+        "componentName": "FarmingCamera"
     }
     """
     base_info = get_base_info(base_name)
@@ -501,23 +507,56 @@ def get_monitor_video(base_name: str) -> str:
     hash_val = int(hashlib.md5(base_name.encode()).hexdigest()[:8], 16)
     camera_count = 2 + (hash_val % 5)
 
-    # 生成视频链接
-    video_url = f"https://example.com/monitor/{base_name}/video.mp4"
-    stream_url = f"rtsp://stream.example.com/{base_name}/live"
+    # 摄像头类型和位置
+    camera_types = ["球机", "枪机", "半球"]
+    locations = ["东区入口", "西区入口", "南区入口", "北区入口", "中心广场", "1号田", "2号田", "3号田", "1号牛舍", "2号牛舍", "运动场"]
+    resolutions = ["1080P", "4K", "720P"]
+
+    cameras = []
+    for i in range(camera_count):
+        # 为每个摄像头生成确定的属性
+        camera_hash = int(hashlib.md5(f"{base_name}_camera_{i}".encode()).hexdigest()[:8], 16)
+
+        camera_id = f"CAM_{base_info['base_id']}_{i+1:03d}"
+        camera_name = f"{base_name}-摄像头{i+1}号"
+        camera_type = camera_types[camera_hash % len(camera_types)]
+        location = locations[camera_hash % len(locations)]
+
+        # 生成状态（85%在线，15%离线）
+        status = "在线" if (camera_hash % 100) < 85 else "离线"
+
+        # 生成最后活跃时间
+        if status == "在线":
+            time_offset = camera_hash % 30  # 在线：最近30分钟内
+        else:
+            time_offset = 30 + (camera_hash % 1440)  # 离线：30分钟-24小时前
+
+        last_active_time = (datetime.now() - timedelta(minutes=time_offset)).strftime('%Y-%m-%d %H:%M:%S')
+
+        # 视频链接
+        video_url = f"https://example.com/monitor/{base_name}/{camera_id}/video.mp4"
+        stream_url = f"rtsp://stream.example.com/{base_name}/{camera_id}/live"
+        resolution = resolutions[camera_hash % len(resolutions)]
+
+        cameras.append({
+            "camera_id": camera_id,
+            "camera_name": camera_name,
+            "camera_type": camera_type,
+            "location": location,
+            "video_url": video_url,
+            "stream_url": stream_url,
+            "status": status,
+            "last_active_time": last_active_time,
+            "resolution": resolution
+        })
 
     # 生成更新时间（当前时间）
     update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     result = {
         "code": 200,
-        "data": {
-            "base_name": base_name,
-            "video_url": video_url,
-            "stream_url": stream_url,
-            "update_time": update_time,
-            "camera_count": camera_count
-        },
-        "componentName": "MonitorVideo"
+        "data": cameras,
+        "componentName": "FarmingCamera"
     }
 
     return json.dumps(result, ensure_ascii=False, indent=2)
@@ -536,9 +575,6 @@ if __name__ == "__main__":
 
     print("\n=== 设备列表测试 ===")
     print(get_device_list.invoke("智慧茶园"))
-
-    print("\n=== 肉牛列表测试 ===")
-    print(get_cattle_list.invoke())
 
     print("\n=== 监控视频测试 ===")
     print(get_monitor_video.invoke("智慧茶园"))

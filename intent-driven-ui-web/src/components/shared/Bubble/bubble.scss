@@ -38,8 +38,8 @@
 
   // 内容容器
   .id-bubble-content-container {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
     gap: var(--id-spacing-xs, 4px);
     max-width: 80%;
     flex: 1;
@@ -77,13 +77,15 @@
   }
 
   // 气泡内容
-  .id-bubble-content {
+  .id-bubble-content,
+  .id-bubble-steps {
     display: inline-block;
     padding: var(--id-spacing-sm, 8px) var(--id-spacing-md, 12px);
     border-radius: var(--id-radius-lg, 8px);
     word-wrap: break-word;
     word-break: break-word;
     white-space: pre-wrap;
+    max-width: 85%;
     transition:
       background-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
       border-color var(--id-duration-base, 200ms) var(--id-ease-in-out),
@@ -130,6 +132,25 @@
       border: none;
       padding: 0;
       color: var(--id-bubble-color-none);
+    }
+  }
+
+  // Steps 特殊样式
+  .id-bubble-steps {
+    display: block !important;
+
+    .id-bubble-step-content {
+      padding: var(--id-spacing-xs, 4px) 0;
+      border-bottom: 1px solid var(--id-color-border, rgba(0, 0, 0, 0.1));
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
     }
   }
 
@@ -193,7 +214,8 @@
       }
     }
 
-    .id-bubble-content {
+    .id-bubble-content,
+    .id-bubble-steps {
       padding: 10px 14px;
       font-size: var(--id-font-size-sm, 13px);
     }

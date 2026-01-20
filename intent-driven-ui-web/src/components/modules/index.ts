@@ -5,7 +5,10 @@ import CarMapConfig from './CarMap'
 import CarTrackConfig from './CarTrack'
 import ErrorComponentConfig from './ErrorComponent'
 
-const configs = [CarListConfig, CarMapConfig, CarTrackConfig]
+import FarmingConfigs from './Farming'
+
+const configs = [CarListConfig, CarMapConfig, CarTrackConfig, ...FarmingConfigs]
+
 export function getComponentByName(name: string): Component {
   return configs.find((config) => config.name === name)?.component || ErrorComponentConfig.component
 }

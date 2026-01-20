@@ -28,11 +28,22 @@ def read_chat_agentSSE(query: str):
                 "Connection": "keep-alive",
             })
 
+from app.agents.quickStart import streamInvoke as CarStreamInvoke
 @router.get("/quickStart")
 def read_chat_quickStart(query: str):
-    from app.agents.quickStart import streamInvoke
     return StreamingResponse(
-            streamInvoke(query, "1"),
+            CarStreamInvoke(query, "1"),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+            })
+
+from app.agents.quick_start_agriculture import streamInvoke as agricultureStreamInvoke
+@router.get("/agriculture")
+def read_chat_agriculture(query: str):
+    return StreamingResponse(
+            agricultureStreamInvoke(query, "1"),
             media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",

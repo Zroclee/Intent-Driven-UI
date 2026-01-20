@@ -19,7 +19,7 @@ model = ChatOpenAI(
         )
 
 agent = create_agent(
-    tools=[get_current_time, get_weather_monitor, get_soil_monitor, get_water_quality_monitor, get_device_list, get_cattle_list, get_monitor_video ],
+    tools=[get_current_time, get_weather_monitor, get_soil_monitor, get_water_quality_monitor, get_device_list ],
     model=model,
     system_prompt=prompts.agriculture_manager,
     # checkpointer=InMemorySaver(),
@@ -50,3 +50,7 @@ def streamInvoke(query: str, thread_id: str):
             metadata={"error_type": type(e).__name__}
         )
         yield "data: " + error_event.to_json() + "\n\n"
+
+
+if __name__ == "__main__":
+    pass
