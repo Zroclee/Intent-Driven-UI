@@ -17,6 +17,7 @@ defineProps({
 .id-layout-chat {
   display: flex;
   flex-direction: column;
-  flex: auto;
+  /* flex: auto; */
+  width: 50%;
 }
 </style>

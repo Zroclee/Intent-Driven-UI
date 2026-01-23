@@ -60,3 +60,14 @@ def read_chat_agriculture(query: str):
                 "Cache-Control": "no-cache",
                 "Connection": "keep-alive",
             })
+
+from app.agents.multi_agent_graph import streamInvoke as multiAgentGraphStreamInvoke
+@router.get("/multiAgentGraph")
+def read_chat_agriculture(query: str, chatId: str):
+    return StreamingResponse(
+            multiAgentGraphStreamInvoke(query, chatId),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+            })

@@ -52,5 +52,3 @@ def streamInvoke(query: str, thread_id: str):
         yield "data: " + error_event.to_json() + "\n\n"
 
 
-if __name__ == "__main__":
-    pass
