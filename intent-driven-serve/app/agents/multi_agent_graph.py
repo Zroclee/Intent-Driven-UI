@@ -6,7 +6,7 @@ import os
 from langchain.agents import create_agent
 from typing import List, Optional
 from typing_extensions import Annotated, TypedDict
-from langgraph.graph import START, END, StateGraph
+from langgraph.graph import START, END, StateGraph, MessagesState
 from langchain_core.messages import HumanMessage, SystemMessage, AnyMessage, AIMessage
 from langgraph.graph.message import add_messages
 from langchain_openai import ChatOpenAI
@@ -28,24 +28,44 @@ model = ChatOpenAI(
             temperature=0.7
         )
 
-# 车辆智能体
-car_agent = create_agent(
-    tools=[get_current_time, get_car_info, get_car_list, get_car_trajectory_list],
-    model=model,
-    system_prompt=prompts.carManager,
-    # checkpointer=InMemorySaver(),
-)
 
-# 农业智能体
-farm_agent = create_agent(
-    tools=[get_current_time, get_weather_monitor, get_soil_monitor, get_water_quality_monitor, get_device_list ],
-    model=model,
-    system_prompt=prompts.agriculture_manager,
-    # checkpointer=InMemorySaver(),
-)
+sub_agent_configs = [
+    {
+        "name": "car_agent",
+        "desc": "车辆智能体，用于处理与车辆相关的操作，如查询车辆信息、轨迹等。",
+        "tools": [get_current_time, get_car_info, get_car_list, get_car_trajectory_list],
+        "system_prompt": prompts.carManager,
+        "enabled": True,
+    },
+    {
+        "name": "farm_agent",   
+        "desc": "农业智能体，用于处理与农业相关的操作，如查询天气、土壤、水质、设备等。",
+        "tools": [get_current_time, get_weather_monitor, get_soil_monitor, get_water_quality_monitor, get_device_list ],
+        "system_prompt": prompts.agriculture_manager,
+        "enabled": True,
+    },
+]
+
+def create_sub_agent(tools: List, system_prompt: str):
+    return create_agent(
+        tools=tools,
+        model=model,
+        system_prompt=system_prompt,
+        checkpointer=True
+    )
+
+# 动态创建子智能体映射
+sub_agents = {
+    config["name"]: create_agent(
+        tools=config["tools"],
+        model=model,
+        system_prompt=config["system_prompt"],
+    )
+    for config in sub_agent_configs
+}
 
 
-class MultiAgentState(TypedDict):
+class MultiAgentState(MessagesState):
     """
     多智能体协作流程的状态定义。
     包含消息历史、用户提问、意图识别结果及子智能体回复。
@@ -82,18 +102,27 @@ def core_llm_call(state: MultiAgentState) -> MultiAgentState:
     }
 
 def subagent_call(state: MultiAgentState) -> MultiAgentState:
-    '''
-    subagent_call
-    '''
+    """
+    根据主管模型的决策动态调用子智能体。
+    
+    Args:
+        state: 当前多智能体状态。
+        
+    Returns:
+        更新后的状态，包含子智能体的回复。
+    """
     query = state["query"]
     supervisor_response = state["supervisor_response"]
 
+    # 遍历配置寻找命中的智能体
+    selected_agent_name = None
+    for agent_name in sub_agents.keys():
+        if agent_name in supervisor_response:
+            selected_agent_name = agent_name
+            break
 
-    if "car_agent" in supervisor_response:
-        agent_res = car_agent.invoke({"messages": [HumanMessage(content=query)]})
-        res = agent_res["messages"][-1]
-    elif "farm_agent" in supervisor_response:
-        agent_res = farm_agent.invoke({"messages": [HumanMessage(content=query)]})
+    if selected_agent_name:
+        agent_res = sub_agents[selected_agent_name].invoke({"messages": [HumanMessage(content=query)]})
         res = agent_res["messages"][-1]
     else:
         res = AIMessage(content="未知路由")
@@ -104,19 +133,20 @@ def subagent_call(state: MultiAgentState) -> MultiAgentState:
     }
 
 
-
 def should_continue(state: MultiAgentState) -> bool:
-    '''
-    should_continue
-    '''
+    """
+    判断是否需要继续调用子智能体。
+    
+    Args:
+        state: 当前多智能体状态。
+        
+    Returns:
+        bool: 如果命中任何配置的子智能体则返回 True。
+    """
     supervisor_response = state["supervisor_response"]
 
-    if "car_agent" in supervisor_response:
-        return True
-    elif "farm_agent" in supervisor_response:
-        return True
-    else:
-        return False
+    # 只要命中任何一个已配置的智能体名，就继续执行
+    return any(agent_name in supervisor_response for agent_name in sub_agents.keys())
 
 
 checkpointer = InMemorySaver()
@@ -152,7 +182,7 @@ def streamInvoke(query: str, thread_id: str):
                 # pass
 
             if stream_mode == "updates":
-                # print(f"---------chunk--------:{data}")
+                print(f"---------updates--------:{data}")
                 # 适合做数据保存
                 # yield f"updates - data:  {data} \n\n"
                 pass
