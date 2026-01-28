@@ -215,7 +215,7 @@ const connectSSE = async (query: string) => {
     try {
       // console.log('📨 Raw SSE data:', event.data)
       const data = JSON.parse(event.data)
-      console.log('📦 Parsed SSE event:', data)
+      // console.log('📦 Parsed SSE event:', data)
       const metadata = data.metadata
 
       let langgraph_step = ''

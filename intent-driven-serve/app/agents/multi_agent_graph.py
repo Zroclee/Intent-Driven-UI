@@ -65,43 +65,46 @@ sub_agents = {
 }
 
 
-class MultiAgentState(MessagesState):
-    """
-    多智能体协作流程的状态定义。
-    包含消息历史、用户提问、意图识别结果及子智能体回复。
-    """
-    # 消息历史列表，使用 add_messages reducer 自动追加新消息
-    messages: Annotated[List[AnyMessage], add_messages]
+# class MultiAgentState(MessagesState):
+#     """
+#     多智能体协作流程的状态定义。
+#     包含消息历史、用户提问、意图识别结果及子智能体回复。
+#     """
+#     # 消息历史列表，使用 add_messages reducer 自动追加新消息
+#     messages: Annotated[List[AnyMessage], add_messages]
     
-    # 用户的原始提问
-    query: str
+#     # 用户的原始提问
+#     query: str
     
-    # 主管大模型提供的额外信息、回复、路由决策
-    supervisor_response: str
+#     # 主管大模型提供的额外信息、回复、路由决策
+#     supervisor_response: str
     
-    # 子智能体处理后的生成内容
-    sub_agent_res: Optional[str]
+#     # 子智能体处理后的生成内容
+#     sub_agent_res: Optional[str]
 
 
-def core_llm_call(state: MultiAgentState) -> MultiAgentState:
+def core_llm_call(state: MessagesState) -> MessagesState:
     '''
     core_llm_call
     '''
 
     core_prompt = prompts.create_core_prompt()
-    query = state["query"]
+    # query = state["messages"][-1].content
+    allMessages = state["messages"]
+
+    print(f"---------allMessages--------:{allMessages}")
 
     res = model.invoke([
         SystemMessage(content=core_prompt),
-        HumanMessage(content=query)
-    ])
+        # HumanMessage(content=query)
+    ] + allMessages)
+    print(f"res: {res}")
 
     return {
         "messages": [res],
-        "supervisor_response": res.content,
     }
 
-def subagent_call(state: MultiAgentState) -> MultiAgentState:
+def subagent_call(state: MessagesState) -> MessagesState:
     """
     根据主管模型的决策动态调用子智能体。
     
@@ -111,18 +114,20 @@ def subagent_call(state: MultiAgentState) -> MultiAgentState:
     Returns:
         更新后的状态，包含子智能体的回复。
     """
-    query = state["query"]
-    supervisor_response = state["supervisor_response"]
+    supervisor_response = state["messages"][-1].content
 
     # 遍历配置寻找命中的智能体
     selected_agent_name = None
+    invoke_content = supervisor_response
+
     for agent_name in sub_agents.keys():
-        if agent_name in supervisor_response:
+        # 严格匹配 agent_name- 格式
+        prefix = f"{agent_name}-"
+        if prefix in supervisor_response:
             selected_agent_name = agent_name
-            break
 
     if selected_agent_name:
-        agent_res = sub_agents[selected_agent_name].invoke({"messages": [HumanMessage(content=query)]})
+        agent_res = sub_agents[selected_agent_name].invoke({"messages": [HumanMessage(content=invoke_content)]})
         res = agent_res["messages"][-1]
     else:
         res = AIMessage(content="未知路由")
@@ -133,7 +138,7 @@ def subagent_call(state: MultiAgentState) -> MultiAgentState:
     }
 
 
-def should_continue(state: MultiAgentState) -> bool:
+def should_continue(state: MessagesState) -> bool:
     """
     判断是否需要继续调用子智能体。
     
@@ -143,15 +148,15 @@ def should_continue(state: MultiAgentState) -> bool:
     Returns:
         bool: 如果命中任何配置的子智能体则返回 True。
     """
-    supervisor_response = state["supervisor_response"]
+    supervisor_response = state["messages"][-1].content
 
-    # 只要命中任何一个已配置的智能体名，就继续执行
-    return any(agent_name in supervisor_response for agent_name in sub_agents.keys())
+    # 只要命中任何一个已配置的智能体名（且包含-），就继续执行
+    return any(f"{agent_name}-" in supervisor_response for agent_name in sub_agents.keys())
 
 
 checkpointer = InMemorySaver()
 
-workflow = StateGraph(MultiAgentState)  
+workflow = StateGraph(MessagesState)  
 workflow.add_node("core_llm_call", core_llm_call)
 workflow.add_node("subagent_call", subagent_call)
 workflow.add_edge(START, "core_llm_call")
@@ -165,7 +170,7 @@ core_agent = workflow.compile(checkpointer=checkpointer)
 def streamInvoke(query: str, thread_id: str):
     try:
         yield "data: " + StreamEvent.create_start_event() + "\n\n"
-        res = core_agent.stream({"query": query},
+        res = core_agent.stream({"messages": [HumanMessage(content=query)],},
                                 {"configurable": {"thread_id": thread_id}},
                                 stream_mode=["messages", "updates"],
                                 subgraphs=True,   
@@ -182,7 +187,7 @@ def streamInvoke(query: str, thread_id: str):
                 # pass
 
             if stream_mode == "updates":
-                print(f"---------updates--------:{data}")
+                # print(f"---------updates--------:{data}")
                 # 适合做数据保存
                 # yield f"updates - data:  {data} \n\n"
                 pass
