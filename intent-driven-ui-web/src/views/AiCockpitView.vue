@@ -26,14 +26,18 @@
     </IdLayoutChat>
     <IdLayoutAside :show-aside="showRightPanel">
       <div v-for="(item, index) in allComponents" :key="'conponent' + item.componentName + index">
-        <component :is="loadComponent(item.componentName)" v-bind="{ data: item.data }"></component>
+        <component
+          :is="loadComponent(item.componentName)"
+          :key="'business-component' + item.componentName + index"
+          v-bind="{ data: item.data }"
+        ></component>
       </div>
     </IdLayoutAside>
   </IdLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted, onMounted, nextTick, watch } from 'vue'
+import { ref, onUnmounted, onMounted, nextTick } from 'vue'
 import {
   IdLayout,
   IdLayoutChat,

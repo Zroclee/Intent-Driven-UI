@@ -12,6 +12,11 @@ from langgraph.graph.message import add_messages
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import InMemorySaver
 
+from langchain_core.messages.utils import (
+    trim_messages,  
+    count_tokens_approximately  
+)
+
 from app.agents.tools.common import get_current_time
 from app.agents.tools.carTools import get_car_info, get_car_list, get_car_trajectory_list
 from app.agents.tools.agriculture_tools import get_weather_monitor, get_soil_monitor, get_water_quality_monitor, get_device_list, get_cattle_list, get_monitor_video 
@@ -91,6 +96,18 @@ def core_llm_call(state: MessagesState) -> MessagesState:
     core_prompt = prompts.create_core_prompt()
     # query = state["messages"][-1].content
     allMessages = state["messages"]
+    # 需要添加消息管理机制，防止消息过长导致模型调用失败
+    # 简单截断最近的5条消息
+    # allMessages = allMessages[-5:]
+    # 根据token数量修剪消息
+    allMessages = trim_messages(  
+        state["messages"],
+        strategy="last",
+        token_counter=count_tokens_approximately,
+        max_tokens=60,
+        start_on="human",
+        end_on=("human", "tool"),
+    )
 
     print(f"---------allMessages--------:{allMessages}")
 
