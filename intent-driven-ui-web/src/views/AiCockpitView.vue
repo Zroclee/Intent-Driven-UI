@@ -77,7 +77,7 @@ const handleSettings = () => {
 // 帮我评估车牌号粤B12345的贷款风险
 // 帮我评估智慧茶园的贷款风险
 
-const inputValue = ref('帮我评估智慧茶园的贷款风险')
+const inputValue = ref('')
 // 输入框发送
 const handleInputSend = (query: string) => {
   console.log('Input send:', query)
@@ -113,7 +113,7 @@ const chatMessages = ref<Array<TypeChatMessage>>([
   {
     id: '1',
     role: 'assistant',
-    content: 'Hello MateChat!'
+    content: 'Hello Intent Driven UI!'
   }
 ])
 
