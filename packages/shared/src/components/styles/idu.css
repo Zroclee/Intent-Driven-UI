@@ -1,0 +1,20 @@
+:root {
+	/* 主色调 - 更鲜艳明亮的蓝色 */
+	--idu-color-primary: #0099ff;
+	--idu-color-primary-light: #66ccff;
+	--idu-color-primary-dark: #0077cc;
+	--idu-color-bg: #e6f4ff;
+
+	/* 文本颜色 */
+	--idu-text-color: #2c3e50;
+	--idu-text-color-secondary: #606266;
+	--idu-text-color-inverse: #ffffff;
+
+	/* 边框和背景 */
+	--idu-border-color: #dcdfe6;
+	--idu-bg-color-white: #ffffff;
+	--idu-bg-color-gray: #f2f6fc;
+
+	/* 阴影 */
+	--idu-shadow-sm: 0 2px 8px rgba(0, 153, 255, 0.15);
+}
