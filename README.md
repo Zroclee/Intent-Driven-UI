@@ -55,7 +55,7 @@
 ### 3.2 项目架构
 
 - apps/web - 基于Vite+Vue3+TypeScript的前端应用
-- apps/backend - 基于Node.js+TypeScript+Express的后端应用
+- apps/backend - 基于Node.js+TypeScript+NestJS的后端应用
 - packages/shared - 基于Vite+Vue3+TypeScript的公共UI组件库
 - docs - 基于VitePress的文档项目
 - configs - 配置文件
