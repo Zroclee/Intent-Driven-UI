@@ -118,9 +118,14 @@ export interface WitnessTask {
 	updateTime: string; // 更新时间
 }
 
-const props = defineProps<{
-	data: WitnessTask[];
-}>();
+const props = withDefaults(
+	defineProps<{
+		data?: WitnessTask[];
+	}>(),
+	{
+		data: () => [],
+	}
+);
 
 // --- State ---
 const searchForm = ref({

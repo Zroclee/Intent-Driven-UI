@@ -163,9 +163,11 @@ export interface WitnessAsset {
 	taskSignStatus: "生效" | "已解约";
 }
 
-const props = defineProps<{
-	data: WitnessAsset[];
-}>();
+const props = withDefaults(defineProps<{
+	data?: WitnessAsset[];
+}>(), {
+	data: () => []
+});
 
 // --- State ---
 const searchForm = ref({

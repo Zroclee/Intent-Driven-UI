@@ -18,6 +18,9 @@ const navigateTo = (path: string) => {
 			<div class="actions">
 				<button @click="navigateTo('/business-assistant')">进入业务助手</button>
 				<button @click="navigateTo('/product-assistant')">进入产品助手</button>
+				<button @click="navigateTo('/business-remote')">
+					进入业务远程组件
+				</button>
 			</div>
 		</div>
 	</main>

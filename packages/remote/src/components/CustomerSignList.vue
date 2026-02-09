@@ -123,9 +123,14 @@ export interface CustomerSign {
 	signStatus: string; // 签约状态
 }
 
-const props = defineProps<{
-	data: CustomerSign[];
-}>();
+const props = withDefaults(
+	defineProps<{
+		data?: CustomerSign[];
+	}>(),
+	{
+		data: () => [],
+	}
+);
 
 // --- State ---
 const searchForm = ref({
