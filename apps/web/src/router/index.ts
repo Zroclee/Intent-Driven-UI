@@ -59,6 +59,12 @@ const router = createRouter({
 					name: "data-ledger",
 					component: () => import("../views/Product/pages/DataLedger.vue"),
 				},
+				{
+					path: "stats",
+					name: "statistics-report",
+					component: () =>
+						import("../views/Product/pages/StatisticsReport.vue"),
+				},
 			],
 		},
 	],

@@ -79,6 +79,7 @@ const menuItems = ref<MenuItem[]>([
 	{ path: "/product/users", name: "用户管理", icon: "👥" },
 	{ path: "/product/roles", name: "角色管理", icon: "🛡️" },
 	{ path: "/product/data-ledger", name: "数据台账", icon: "📊" },
+	{ path: "/product/stats", name: "统计报表", icon: "📈" },
 ]);
 </script>
 
