@@ -3,7 +3,7 @@
 		<!-- 顶部 Header -->
 		<header class="layout-header">
 			<div class="header-left">
-				<div class="logo" :class="{ collapsed: isCollapsed }">
+				<div class="logo">
 					<div class="logo-icon">
 						<svg
 							width="32"
@@ -28,11 +28,8 @@
 							</text>
 						</svg>
 					</div>
-					<span class="logo-text" v-show="!isCollapsed">产品助手后台</span>
+					<span class="logo-text">产品助手后台</span>
 				</div>
-				<button class="trigger-btn" @click="toggleCollapse">
-					<span class="icon">{{ isCollapsed ? "》" : "《" }}</span>
-				</button>
 			</div>
 			<div class="user-info">
 				<span>管理员</span>
@@ -41,7 +38,7 @@
 
 		<div class="layout-body">
 			<!-- 左侧 Sidebar -->
-			<aside class="layout-sidebar" :class="{ collapsed: isCollapsed }">
+			<aside class="layout-sidebar">
 				<nav class="sidebar-menu">
 					<router-link
 						v-for="item in menuItems"
@@ -49,10 +46,9 @@
 						:to="item.path"
 						class="menu-item"
 						active-class="active"
-						:title="isCollapsed ? item.name : ''"
 					>
 						<span class="icon">{{ item.icon }}</span>
-						<span class="text" v-show="!isCollapsed">{{ item.name }}</span>
+						<span class="text">{{ item.name }}</span>
 					</router-link>
 				</nav>
 			</aside>
@@ -79,15 +75,11 @@ interface MenuItem {
 }
 
 const menuItems = ref<MenuItem[]>([
+	{ path: "/product/apps", name: "应用管理", icon: "📱" },
 	{ path: "/product/users", name: "用户管理", icon: "👥" },
 	{ path: "/product/roles", name: "角色管理", icon: "🛡️" },
+	{ path: "/product/data-ledger", name: "数据台账", icon: "📊" },
 ]);
-
-const isCollapsed = ref(false);
-
-const toggleCollapse = () => {
-	isCollapsed.value = !isCollapsed.value;
-};
 </script>
 
 <style scoped>
@@ -128,37 +120,9 @@ const toggleCollapse = () => {
 	width: 200px; /* 默认宽度匹配侧边栏 */
 }
 
-.logo.collapsed {
-	width: 64px;
-	justify-content: center;
-}
-
 .logo-icon {
 	display: block; /* 始终显示图标 */
 	flex-shrink: 0;
-}
-
-.logo.collapsed .logo-icon {
-	/* 保持显示 */
-}
-
-.logo.collapsed .logo-text {
-	display: none;
-}
-
-.trigger-btn {
-	border: none;
-	background: none;
-	cursor: pointer;
-	font-size: 20px;
-	padding: 4px 8px;
-	border-radius: 4px;
-	color: #666;
-	transition: background-color 0.3s;
-}
-
-.trigger-btn:hover {
-	background-color: #f5f5f5;
 }
 
 .user-info {
@@ -185,10 +149,6 @@ const toggleCollapse = () => {
 	flex-shrink: 0;
 }
 
-.layout-sidebar.collapsed {
-	width: 64px;
-}
-
 .sidebar-menu {
 	padding: 16px 0;
 }
@@ -205,11 +165,6 @@ const toggleCollapse = () => {
 	overflow: hidden;
 }
 
-.layout-sidebar.collapsed .menu-item {
-	padding: 14px 0;
-	justify-content: center;
-}
-
 .menu-item:hover {
 	color: #fff;
 	background-color: rgba(255, 255, 255, 0.08);
@@ -224,10 +179,6 @@ const toggleCollapse = () => {
 	margin-right: 12px;
 	font-size: 18px;
 	transition: margin 0.3s;
-}
-
-.layout-sidebar.collapsed .menu-item .icon {
-	margin-right: 0;
 }
 
 /* Content 样式 */

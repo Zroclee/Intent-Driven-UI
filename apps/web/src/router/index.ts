@@ -39,6 +39,12 @@ const router = createRouter({
 			redirect: "/product/users",
 			children: [
 				{
+					path: "apps",
+					name: "application-management",
+					component: () =>
+						import("../views/Product/pages/ApplicationManagement.vue"),
+				},
+				{
 					path: "users",
 					name: "user-management",
 					component: () => import("../views/Product/pages/UserManagement.vue"),
@@ -47,6 +53,11 @@ const router = createRouter({
 					path: "roles",
 					name: "role-management",
 					component: () => import("../views/Product/pages/RoleManagement.vue"),
+				},
+				{
+					path: "data-ledger",
+					name: "data-ledger",
+					component: () => import("../views/Product/pages/DataLedger.vue"),
 				},
 			],
 		},
