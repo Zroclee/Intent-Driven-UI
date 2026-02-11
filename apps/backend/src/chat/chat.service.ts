@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { streamInvoke } from '../agents/agent_car';
 import { streamInvoke as streamInvokeMulti } from '../agents/agent_multi';
+import { streamInvoke as streamInvokeProduct } from '../agents/agent_product';
 
 @Injectable()
 export class ChatService {
@@ -18,5 +19,9 @@ export class ChatService {
 
   streamMultiChat(query: string, thread_id: string = 'default') {
     return streamInvokeMulti(query, thread_id);
+  }
+
+  streamProductChat(query: string, thread_id: string = 'default') {
+    return streamInvokeProduct(query, thread_id);
   }
 }

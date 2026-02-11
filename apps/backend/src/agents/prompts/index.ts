@@ -79,6 +79,12 @@ export const AGRICULTURE_MANAGER_PROMPT = readPromptFile(
 export const CAR_MANAGER_PROMPT = readPromptFile('carManager.md');
 
 /**
+ * 产品管理 Agent 的系统提示词
+ * 读取自同目录下的 productPrompt.md
+ */
+export const PRODUCT_MANAGER_PROMPT = readPromptFile('productPrompt.md');
+
+/**
  * 生成主管智能体的提示词
  */
 function generateSupervisorPrompt(): string {

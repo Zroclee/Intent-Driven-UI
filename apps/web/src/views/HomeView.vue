@@ -17,7 +17,7 @@ const navigateTo = (path: string) => {
 			<p>欢迎来到 Intent Driven Monorepo 演示项目</p>
 			<div class="actions">
 				<button @click="navigateTo('/business-assistant')">进入业务助手</button>
-				<button @click="navigateTo('/product-assistant')">进入产品助手</button>
+				<button @click="navigateTo('/product')">进入产品助手</button>
 				<button @click="navigateTo('/business-remote')">
 					进入业务远程组件
 				</button>

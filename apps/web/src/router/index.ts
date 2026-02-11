@@ -28,14 +28,9 @@ const router = createRouter({
 			component: BusinessSettingView,
 		},
 		{
-			path: "/product-assistant",
-			name: "product-assistant",
-			component: ProductAssistantView,
-		},
-		{
 			path: "/product",
 			name: "product-layout",
-			component: () => import("../views/Product/pages/Layout.vue"),
+			component: () => import("../views/Product/index.vue"),
 			redirect: "/product/users",
 			children: [
 				{

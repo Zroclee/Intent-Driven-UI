@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
+import eventBus from "../../../utils/eventBus";
 import { IDUBubble, IDUInput } from "@idu/core";
 
 interface Message {
@@ -29,11 +30,12 @@ const chatContentRef = ref<HTMLElement | null>(null);
 const curChatId = ref("");
 const myES = ref<EventSource | null>(null);
 
-const scrollToBottom = async () => {
-	await nextTick();
-	if (chatContentRef.value) {
-		chatContentRef.value.scrollTop = chatContentRef.value.scrollHeight;
-	}
+const scrollToBottom = () => {
+	nextTick(() => {
+		if (chatContentRef.value) {
+			chatContentRef.value.scrollTop = chatContentRef.value.scrollHeight;
+		}
+	});
 };
 
 /**
@@ -82,7 +84,7 @@ const connectSSE = async (query: string) => {
 	scrollToBottom();
 
 	const url =
-		"http://localhost:3000/chat/multi?query=" +
+		"http://localhost:3000/chat/product?query=" +
 		encodeURIComponent(query) +
 		"&thread_id=" +
 		curChatId.value;
@@ -117,6 +119,18 @@ const connectSSE = async (query: string) => {
 					break;
 				case "tool_output":
 					console.log("📤 工具返回:", data.content);
+					// 解析 action 并通过 EventBus 通知
+					try {
+						const output = JSON.parse(data.content);
+						if (output.actions && Array.isArray(output.actions)) {
+							output.actions.forEach((action: any) => {
+								console.log("🚀 触发 Action (EventBus):", action);
+								eventBus.emit("action", action);
+							});
+						}
+					} catch (e) {
+						console.warn("⚠️ 解析工具返回数据失败:", e);
+					}
 					break;
 				case "tool_call_end":
 					console.log("✅ 工具调用完成");
