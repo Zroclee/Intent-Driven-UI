@@ -114,8 +114,10 @@ registerAction("NAVIGATE", async (action: any) => {
     // 如果是当前页面就不要跳转了
     if (router.currentRoute.value.path !== targetPath) {
       await router.push(targetPath);
-    }
-	notifyNext();
+    } else {
+		notifyNext();
+	}
+	
   }
 });
 </script>
