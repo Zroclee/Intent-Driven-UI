@@ -81,6 +81,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick, onUnmounted } from "vue";
 import * as echarts from "echarts";
+import { useAIAction } from "../actions/useAIAction";
+const { notifyNext } = useAIAction();
 
 // --- 类型定义 ---
 type TabValue = "client" | "asset" | "device";
@@ -316,6 +318,7 @@ const handleResize = () => {
 };
 
 onMounted(() => {
+	notifyNext();
 	initCharts();
 	window.addEventListener("resize", handleResize);
 });

@@ -111,6 +111,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
+import { useAIAction } from "../actions/useAIAction";
+const { notifyNext } = useAIAction();
+
 
 /**
  * 角色接口定义
@@ -175,6 +178,7 @@ const initMockData = () => {
 
 // 页面加载时初始化数据
 onMounted(() => {
+	notifyNext();
 	initMockData();
 });
 

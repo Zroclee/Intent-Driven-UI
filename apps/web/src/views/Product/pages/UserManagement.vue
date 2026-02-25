@@ -108,11 +108,41 @@
 				</button>
 			</div>
 		</div>
+
+		<!-- 新增用户弹窗 -->
+		<UserAdd
+			ref="userAddRef"
+			v-model:visible="isAddModalVisible"
+			@confirm="handleUserAdd"
+		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, nextTick } from "vue";
+import { useAIAction } from "../actions/useAIAction";
+import UserAdd from "./components/UserAdd.vue";
+const { notifyNext, registerAction } = useAIAction();
+
+const userAddRef = ref<InstanceType<typeof UserAdd> | null>(null);
+
+registerAction("OPEN_MODAL", async (action) => {
+	if (action.target === "createUserModal") {
+		isAddModalVisible.value = true;
+		
+		notifyNext();
+	}
+});
+registerAction("FILL_FORM", async (action) => {
+	if (action.target === "createUserForm") {
+		const fields = action.fields || {};
+		if (userAddRef.value) {
+			userAddRef.value.setForm(fields);
+		}
+		await nextTick();
+		notifyNext();
+	}
+});
 
 /**
  * 用户接口定义
@@ -139,6 +169,8 @@ const selectedUserIds = ref<string[]>([]);
 const currentPage = ref(1);
 // 每页条数
 const pageSize = 10;
+// 新增弹窗显示状态
+const isAddModalVisible = ref(false);
 
 /**
  * 初始化假数据
@@ -164,6 +196,7 @@ const initMockData = () => {
 
 // 页面加载时初始化数据
 onMounted(() => {
+	notifyNext()
 	initMockData();
 });
 
@@ -255,7 +288,29 @@ const handleReset = () => {
  * 新增用户
  */
 const handleAdd = () => {
-	alert("点击了新增按钮");
+	isAddModalVisible.value = true;
+};
+
+/**
+ * 处理新增确认
+ */
+const handleUserAdd = (userData: {
+	username: string;
+	organization: string;
+	role: string;
+}) => {
+	const newId = `U${String(allData.value.length + 1).padStart(5, "0")}`;
+	const newUser: User = {
+		id: newId,
+		name: userData.username,
+		organization: userData.organization,
+		role: userData.role,
+		status: "启用", // 默认状态
+	};
+	// 添加到开头
+	allData.value.unshift(newUser);
+	// 提示
+	alert(`添加成功：${newUser.name}`);
 };
 
 /**

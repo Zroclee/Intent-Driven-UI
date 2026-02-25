@@ -161,7 +161,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, watch } from "vue";
+import { ref, computed, reactive, watch, onMounted } from "vue";
+import { useAIAction } from "../actions/useAIAction";
+const { notifyNext } = useAIAction();
+
+// 页面加载时初始化数据
+onMounted(() => {
+	notifyNext();
+});
+
+
 
 // --- 类型定义 ---
 type TabValue = "client" | "asset" | "device";

@@ -113,6 +113,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
+import { useAIAction } from "../actions/useAIAction";
+const { notifyNext } = useAIAction();
+
 
 // 类型定义
 interface AppInfo {
@@ -239,6 +242,7 @@ const filteredGroups = computed(() => {
 
 // 生命周期
 onMounted(() => {
+	notifyNext();
 	generateMockData();
 });
 

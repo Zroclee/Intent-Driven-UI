@@ -6,7 +6,7 @@ import { z } from 'zod';
  * 仅返回操作意图和参数，不执行实际业务逻辑
  */
 export const createUserTool = tool(
-  ({ username, email, role }) => {
+  ({ username, organization, role }) => {
     return {
       intent: 'create_user',
       reply: '我将为你打开新增用户页面。',
@@ -18,7 +18,7 @@ export const createUserTool = tool(
           target: 'createUserForm',
           fields: {
             username: username || '',
-            email: email || '',
+            organization: organization || '',
             role: role || '',
           },
         },
@@ -30,7 +30,7 @@ export const createUserTool = tool(
     description: '新增一个系统用户',
     schema: z.object({
       username: z.string().optional().describe('用户名'),
-      email: z.string().optional().describe('邮箱地址'),
+      organization: z.string().optional().describe('组织名称'),
       role: z.string().optional().describe('用户角色'),
     }),
   },

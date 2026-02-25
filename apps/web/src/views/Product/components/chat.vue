@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
-import eventBus from "../../../utils/eventBus";
 import { IDUBubble, IDUInput } from "@idu/core";
+import { useAIAction } from "../actions/useAIAction";
+const { execute } = useAIAction();
 
 interface Message {
 	id: number | string;
@@ -123,10 +124,8 @@ const connectSSE = async (query: string) => {
 					try {
 						const output = JSON.parse(data.content);
 						if (output.actions && Array.isArray(output.actions)) {
-							output.actions.forEach((action: any) => {
-								console.log("🚀 触发 Action (EventBus):", action);
-								eventBus.emit("action", action);
-							});
+							console.log("🚀 触发 Action (EventBus):", output.actions);
+							execute(output.actions);
 						}
 					} catch (e) {
 						console.warn("⚠️ 解析工具返回数据失败:", e);
