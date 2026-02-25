@@ -3,7 +3,7 @@
     <!-- 顶部 Header -->
     <header class="layout-header">
       <div class="header-left">
-        <div class="logo">
+        <div class="logo" @click="router.push('/')">
           <div class="logo-icon">
             <svg
               width="32"
@@ -221,6 +221,7 @@ registerAction("NAVIGATE", async (action: any) => {
   gap: 12px;
   transition: all 0.3s;
   width: 200px; /* 默认宽度匹配侧边栏 */
+  cursor: pointer;
 }
 
 .logo-icon {
