@@ -77,7 +77,4 @@ pnpm run dev
 ### 4. 原型展示
 
 ！！！ 注意：以下原型展示仅为演示目的，实际应用中可能会有差异。
-![系统智能助手原型演示](https://github.com/Zroclee/Intent-Driven-UI/issues/1#issue-3995138530)
-
-
-<video src="https://github.com/Zroclee/Intent-Driven-UI/issues/1#issue-3995138530" controls="controls" width="500" height="300"></video>
+![系统智能助手原型演示](./docs/design/images/系统智能助手原型演示.gif)
