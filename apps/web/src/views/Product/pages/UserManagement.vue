@@ -120,8 +120,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, nextTick } from "vue";
-import { useAIAction } from "../actions/useAIAction";
 import UserAdd from "./components/UserAdd.vue";
+
+import { useAIAction } from "@idu/core";
 const { notifyNext, registerAction } = useAIAction();
 
 const userAddRef = ref<InstanceType<typeof UserAdd> | null>(null);

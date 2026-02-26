@@ -111,7 +111,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from "vue";
-import { useAIAction } from "../actions/useAIAction";
+import { useAIAction } from "@idu/core";
 const { notifyNext } = useAIAction();
 
 

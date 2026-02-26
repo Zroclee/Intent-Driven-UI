@@ -3,6 +3,7 @@ import IDUHeader from "./components/Header";
 import IDUBubble from "./components/Bubble";
 import IDUInput from "./components/Input";
 import IDUDynamicRenderer from "./components/DynamicRenderer";
+import { useAIAction } from "./components/Action/useAIAction";
 import "./components/styles/idu.css"; // 引入全局样式
 
 const components = [IDUHeader, IDUBubble, IDUInput, IDUDynamicRenderer];
@@ -17,7 +18,7 @@ const IDUCore: Plugin = {
 	},
 };
 
-export { IDUHeader, IDUBubble, IDUInput, IDUDynamicRenderer };
+export { IDUHeader, IDUBubble, IDUInput, IDUDynamicRenderer, useAIAction };
 export type {
 	RegisteredComponent,
 	DynamicComponentData,

@@ -162,7 +162,7 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive, watch, onMounted } from "vue";
-import { useAIAction } from "../actions/useAIAction";
+import { useAIAction } from "@idu/core";
 const { notifyNext } = useAIAction();
 
 // 页面加载时初始化数据

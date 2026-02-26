@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick, onUnmounted } from "vue";
 import * as echarts from "echarts";
-import { useAIAction } from "../actions/useAIAction";
+import { useAIAction } from "@idu/core";
 const { notifyNext } = useAIAction();
 
 // --- 类型定义 ---

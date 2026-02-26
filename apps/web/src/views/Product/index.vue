@@ -105,7 +105,7 @@ const toggleChat = () => {
 
 const router = useRouter();
 
-import { useAIAction } from "./actions/useAIAction";
+import { useAIAction } from "@idu/core";
 const { registerAction, notifyNext } = useAIAction();
 
 registerAction("NAVIGATE", async (action: any) => {

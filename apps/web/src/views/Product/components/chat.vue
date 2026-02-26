@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
-import { IDUBubble, IDUInput } from "@idu/core";
-import { useAIAction } from "../actions/useAIAction";
+import { IDUBubble, IDUInput, useAIAction } from "@idu/core";
 const { execute } = useAIAction();
 
 interface Message {
