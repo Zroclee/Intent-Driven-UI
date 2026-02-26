@@ -42,9 +42,11 @@
 ```
 ├── apps   // 应用
 │   ├── web  // 前端应用
+│   ├── express  // 远程组件服务
 │   └── backend  // 后端应用
 ├── packages
 │   ├── shared  // 公共UI组件库
+│   └── remote  // 前端远程组件库
 ├── docs  // 文档
 ├── configs  // 配置
 ├── .gitignore
@@ -62,14 +64,21 @@
 
 ### 3.3 项目启动
 
-```
+```shell
 git clone https://github.com/Zroclee/Intent-Driven-UI.git
 
 cd Intent-Driven-UI
 
 pnpm install 
 
-pnpm run dev
+# 启动前端应用
+pnpm run dev:web
+
+# 启动远程组件服务
+pnpm run dev:express
+
+# 启动后端应用  
+pnpm run dev:backend
 
 ```
 
@@ -77,4 +86,8 @@ pnpm run dev
 ### 4. 原型展示
 
 ！！！ 注意：以下原型展示仅为演示目的，实际应用中可能会有差异。
+- 系统智能助手原型演示
 ![系统智能助手原型演示](./docs/design/images/系统智能助手原型演示.gif)
+
+- 业务AI助手原型演示
+![业务AI助手原型演示](./docs/design/images/业务助手演示.gif)
