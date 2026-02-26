@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/Intent-Driven-UI/',
   title: "Intent Driven UI",
   description: "意图驱动UI",
   themeConfig: {
