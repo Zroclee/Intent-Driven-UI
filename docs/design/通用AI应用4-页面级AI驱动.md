@@ -4,272 +4,160 @@
 
 - **版本号：** V0.4
 - **拟稿人：** 李照鹏
-- **时间：** 2026-01-29
+- **时间：** 2026-02-25
 
 ---
+
+## 1. 背景和现状
+
+### 1.1 现状分析
 
 - 通用AI应用 - 一、[基础架构设计](./通用AI应用1-架构设计.md)
 - 通用AI应用 - 二、[前端AI驱动组件架构设计](./通用AI应用2-前端AI驱动组件.md)
 - 通用AI应用 - 三、[多智能体和上下文工程](./通用AI应用3-多智能体和上下文工程.md)
 
-这是一个非常前沿且具有高业务价值的架构设计挑战。你想要实现的不仅仅是一个“问答机器人”，而是一个**“Copilot（副驾驶）”**或**“Agentic UI（代理式交互）”**系统。
+在项目的前期阶段，我们已经成功搭建了**基础 AI 驱动架构**、**多智能体上下文工程**以及**原子级 AI 组件原型**。目前的系统能够实现在对话框内进行高质量的意图识别与数据生成。系统通过侧边栏（Sidebar）或独立对话窗口提供服务，具备了初步的智能化交互能力。
 
-核心难点在于：**如何让非结构化的自然语言（LLM）准确控制结构化的业务系统（20+页面、微前端、权限），并实现双向交互。**
+### 1.2 痛点和瓶颈
 
-以下是基于 **Python + LangChain** (后端) 和 **Vue + Qiankun** (前端) 的架构设计方案。
+尽管原型系统表现良好，但在迈向“系统级副驾驶（Copilot）”的过程中，暴露出以下核心问题：
 
----
-
-### 1. 核心设计理念：AI 也就是“超级路由”与“业务大脑”
-
-在这个架构中，AI 不再只是侧边栏的一个对话框，它是系统的**中枢控制器**。
-
-* **意图识别 (Intent Recognition):** 将用户的“我想看某某车”转化为系统指令。
-* **语义路由 (Semantic Routing):** 摒弃传统的硬编码菜单，建立“页面/功能向量索引”，AI 决定跳转哪里。
-* **双向通信 (Bi-directional IO):** 前端不仅接收指令跳转，还要将当前页面的数据快照 (Context) 喂给 AI 进行分析。
+* **交互孤岛化**：智能体被局限在侧边栏对话框内，无法跳出“对话框”去操作主画布区域的复杂业务逻辑。
+* **指令脱节**：自然语言生成的非结构化指令，难以精确对应业务系统中复杂的路由跳转、状态同步及多级弹窗联动。
+* **缺乏生命周期感知**：在大规模业务系统中（20+页面、微前端架构），LLM 往往在页面组件尚未挂载时就发出了操作指令，导致指令丢失或执行异常。
+* **无法闭环执行**：缺乏“执行-反馈-下一步”的确定性通知机制，难以完成跨页面的长链路任务（如：跳转 -> 搜索 -> 选中 -> 编辑 -> 提交）。
 
 ---
 
-### 2. 系统架构图 (Mermaid)
+## 2. 核心设计理念
 
-这是一个高层架构图，展示了用户、前端宿主、微应用与后端 AI Agent 的交互关系。
+为了打破对话框的边界，我们提出了 **Agentic UI（代理式交互）** 理念，其核心在于将大模型从“回答者”转变为“操作者”：
 
-![](./images/mermaid-页面级接入流程图.png)
-
-```mermaid
-graph TD
-    User((用户)) -->|语音/文字指令| MainApp[主应用框架 Vue + Qiankun]
-    
-    subgraph Frontend [前端领域]
-        MainApp -->|挂载/卸载| SubApp1[物联网子应用]
-        MainApp -->|挂载/卸载| SubApp2[台账子应用]
-        MainApp -->|挂载/卸载| SubApp3[其他业务子应用]
-        
-        AIChat[AI 交互组件 悬浮窗/侧边栏] -- 嵌入 --> MainApp
-        EventBus[全局通信总线 Qiankun GlobalState]
-        
-        SubApp1 <--> EventBus
-        SubApp2 <--> EventBus
-        AIChat <--> EventBus
-    end
-    
-    subgraph Backend [AI后端领域 Python]
-        Gateway[API Gateway / WebSocket]
-        
-        Orchestrator[LangChain Agent Orchestrator]
-        
-        Gateway <--> Orchestrator
-        
-        VectorDB[(向量数据库\n页面/文档索引)]
-        RelationalDB[(业务数据库)]
-        
-        subgraph Tools [LangChain Tools]
-            PermTool[权限校验工具]
-            NavTool[页面路由工具]
-            DataTool[业务数据查询工具]
-            InstructionTool[前端指令生成器]
-        end
-        
-        Orchestrator --> Tools
-        Tools --> VectorDB
-        Tools --> RelationalDB
-    end
-
-    AIChat <-->|SSE / WebSocket| Gateway
-    
-    note1[流程: 用户提问 -> AI解析 -> 查权限 -> 生成JSON指令 -> 前端执行]
-
-```
+* **协议先行**：将 UI 操作标准化为一种可执行的 JSON DSL（Action Schema）。
+* **响应式挂载**：Action 的生命周期与 UI 组件的声明周期强绑定，随组件挂载而注册，随销毁而卸载。
+* **信号驱动（Signal-Driven）**：执行链条不再是简单的定时等待，而是基于“信号通知”的确定性异步流，确保每一步操作在 UI 渲染就绪后再进行。
 
 ---
 
-### 3. 详细模块设计
+## 3. 架构设计方案
 
-#### A. 后端设计 (Python + LangChain)
+### 3.1 智能体工具和提示词 - 制定 action 协议
 
-后端是系统的“大脑”，需要维护一个**系统注册表（System Registry）**。
+智能体不再直接输出文本，而是根据用户的模糊意图，调用工具生成一个 `actions` 序列。
 
-1. **页面/场景注册表 (Page Registry):**
-* 你需要将20+个页面进行语义化描述，存入向量数据库（如 FAISS, Chroma 或 pgvector）。
-* *结构示例:*
-```json
-{
-  "page_id": "iot_vehicle_detail",
-  "route_path": "/iot/vehicles/detail/:id",
-  "description": "展示车辆的详细信息，包含传感器数据、行驶轨迹和报警记录。",
-  "required_permission": "iot:vehicle:view",
-  "parameters": ["vehicle_id"]
+**Action 协议定义：**
+
+```typescript
+interface Action {
+  type: string;        // 动作类型，如 'navigation', 'openModal', 'fillForm'
+  params: Record<string, any>; // 动作参数
+  atomic?: boolean;    // 是否为原子操作
 }
 
 ```
 
+**System Prompt 策略：**
 
+> 你是一个系统副驾驶。请根据用户意图，从工具库中选择 action 组合。
+> 如果用户说“帮我新增一个叫李四的管理员”，你需要输出：
+> 1. navigation(path='/users')
+> 2. openUserModal()
+> 3. fillUserForm(name='李四', role='admin')
+> 
+> 
 
+### 3.2 前端 AI-ACTION 事件驱动设计
 
-2. **LangChain Agent 架构:**
-* 使用 `OpenAI Functions Agent` 或 `ReAct Agent`。
-* **核心 Tool 1: `check_permission(user_id, permission_code)**`: 查询用户是否有权访问目标页面。
-* **核心 Tool 2: `match_intent_to_page(user_query)**`: 在向量库中搜索最匹配的页面配置。
-* **核心 Tool 3: `generate_ui_instruction**`: 生成前端能读懂的 JSON 指令。
+采用**单例模式**构建全局 `ActionBus`，作为 Copilot 与业务系统的通讯中枢。
 
+* **解耦设计**：ActionBus 不关心具体的业务逻辑，它只负责维护一个“动作-处理器”的映射表。
+* **微前端支持**：在微前端环境下，ActionBus 挂载在全局 `window` 或基座应用中，确保跨应用间的指令下发一致性。
 
-3. **Prompt Engineering (提示词工程):**
-* System Prompt 需要设定人设：“你是一个高级业务管理员，清楚所有菜单位置。如果是导航请求，请输出 JSON 指令；如果是分析请求，请结合上下文回答。”
+### 3.3 actions 注册、完成通知和串行执行
 
+核心逻辑通过 `execute` 方法的异步递归实现。每执行完一个 `handler`，必须通过 `await this.waitNext()` 进入阻塞状态，直到 UI 层发出 `notifyNext()` 信号。
 
-
-#### B. 前端设计 (Vue + Qiankun)
-
-前端是“执行者”。Qiankun 的主应用（Main App）负责承载 AI 助手，保证切换子应用时 AI 不会断开。
-
-1. **全局 AI 组件 (Global AI Widget):**
-* 位于 Main App 中，使用 WebSocket 或 SSE (Server-Sent Events) 与后端保持长连接。
-* **指令解析器 (Instruction Parser):** 监听后端返回的特定事件流。
-
-
-2. **通信协议 (Action Protocol):**
-定义一套 AI 控制前端的标准协议。
-* **导航指令:** `{ "type": "NAVIGATE", "payload": { "path": "/iot/list", "params": {...} } }`
-* **高亮指令:** `{ "type": "HIGHLIGHT", "payload": { "selector": "#vehicle-table-row-1" } }`
-* **数据请求:** `{ "type": "GET_CONTEXT", "payload": {} }` (AI 问前端：你现在页面上展示的是什么数据？)
-
-
-3. **微应用改造 (Sub-apps):**
-* 子应用需要通过 Qiankun 的 `onGlobalStateChange` 或自定义 EventBus 向主应用汇报状态。
-* *场景:* 当页面加载完“车辆台账”数据后，将关键数据的摘要（或当前页面的 JSON 数据）同步给 AI 组件，以便 AI 进行分析。
-
-
+* **注册（Register）**：组件在 `onMounted` 时声明自己具备“被操控”的能力（如 `fillForm`）。
+* **执行（Execute）**：顺序遍历 actions 数组。
+* **通知（Notify）**：当组件完成动画渲染、接口请求或路由跳转后，调用 `notifyNext()`，释放 Promise 锁。
 
 ---
 
-### 4. 业务场景流程演练 (The Workflow)
+## 4. 流程图 - Mermaid
 
-我们以你提到的**“物联网车联网下钻”**为例。
+以下流程图展示了从用户下达指令到系统级 UI 联动执行的完整链路：
 
-#### 第一阶段：意图识别与导航 (Navigation)
-
-1. **用户:** “我想看车牌号京A88888的车辆详细信息。”
-2. **Main App:** 将文本发送给 Python Backend。
-3. **LangChain Agent:**
-* *Step 1 (Search):* 搜索 Page Registry，找到“车辆详情页”匹配度最高。
-* *Step 2 (Check):* 调用 `check_permission` 工具，确认用户有 `iot:vehicle:view` 权限。
-* *Step 3 (Extract):* 从用户语句中提取参数 `plate_number="京A88888"`。
-* *Step 4 (Query ID):* (可选) 调用数据库工具将车牌转为系统 ID。
-
-
-4. **Backend:** 返回 JSON 指令：
-```json
-{
-  "action": "NAVIGATE",
-  "path": "/sub-iot/vehicle-detail",
-  "query": { "plate_num": "京A88888" },
-  "speech": "好的，正在为您打开京A88888的车辆详情页。"
-}
-
-```
-
-
-5. **Main App:** 收到指令，调用 `history.pushState` 或 Qiankun 的路由跳转方法。
-6. **Sub App:** 页面加载，展示车辆信息。
-
-#### 第二阶段：页面感知与分析 (Context Analysis)
-
-1. **Sub App:** 页面加载完成后，通过 Qiankun GlobalState 发送当前页面数据摘要：
-```javascript
-// 子应用代码
-props.setGlobalState({
-  currentPageContext: {
-    page: "vehicle-detail",
-    data: { fuel_level: "10%", status: "offline", last_maintenance: "2023-01-01" }
-  }
-});
-
-```
-
-
-2. **Main App:** AI 组件接收到 Context 更新，暂存到本地上下文。
-3. **用户:** “这辆车有什么异常吗？”
-4. **LangChain:** 接收用户问题 + **当前页面 Context JSON**。
-5. **LangChain:** 分析数据（油量10% -> 偏低，状态离线 -> 异常）。
-6. **Backend:** 返回回答：“检测到该车辆油量仅剩10%，且处于离线状态，建议立即联系驾驶员或查看最后一次报警记录。”
+![](./images/mermaid-页面操控流程图.png)
 
 ---
 
-### 5. 关键代码片段示例
+## 5. 总结和扩展
 
-#### 后端：LangChain Tool 定义 (Python)
+### 5.1 方案总结
 
-```python
-from langchain.tools import tool
-from pydantic import BaseModel, Field
+本方案通过 **“指令序列化 + 异步阻塞执行 + UI 信号回传”** 的模式，解决了 LLM 无法精准操控复杂业务系统的问题。它将 AI 能力从侧边栏的“聊天室”释放到了真实的“操作现场”。
 
-class NavigationInput(BaseModel):
-    destination: str = Field(description="用户想去的页面名称或描述")
+### 5.2 扩展方向
 
-@tool("navigate_system", args_schema=NavigationInput)
-def navigate_system(destination: str):
-    """
-    当用户想要跳转页面或查找功能时使用此工具。
-    返回前端路由指令。
-    """
-    # 1. 向量搜索匹配页面
-    matched_page = vector_db.similarity_search(destination, k=1)[0]
-    
-    # 2. 权限校验 (伪代码)
-    user = get_current_user()
-    if not check_perm(user, matched_page.metadata['perm']):
-        return {"action": "DENY", "message": "抱歉，您没有查看该模块的权限。"}
-    
-    # 3. 返回指令
-    return {
-        "action": "NAVIGATE",
-        "path": matched_page.metadata['route'],
-        "message": f"已为您导航至{matched_page.metadata['name']}"
-    }
+* **异常回滚**：如果 actions 序列中的某一步（如 `fillForm`）因权限问题失败，ActionBus 应支持中断执行并通知智能体进行纠错（Self-Healing）。
+* **意图拦截**：在执行关键动作（如“删除用户”）前，ActionBus 可插入一个 `ConfirmAction`，强制要求用户在 UI 上点击确认。
+* **多维感知**：未来可引入视觉大模型（VLM），让智能体不仅能通过协议控制 UI，还能通过“观察”页面截图来判断当前 UI 状态是否符合预期。
 
-```
+### 5.3 平台级建设：Agentic UI 即服务 (AUaaS)
 
-#### 前端：指令执行器 (Vue/JavaScript)
+这是一个极具前瞻性的想法。将 **Agentic UI 从“项目级插件”升级为“平台级基础设施”**，意味着你需要构建一套类似于“低代码平台”但面向“智能体控制”的标准化接入协议。
 
-```javascript
-// MainApp / components / AICopilot.vue
+在这种愿景下，平台不再仅仅是对话窗口，而是一个**智能调度中枢**，屏蔽了不同业务系统的技术栈差异。
 
-function handleServerResponse(response) {
-  // 语音播报 (TTS)
-  if (response.speech) speak(response.speech);
-
-  // 解析指令
-  if (response.action === 'NAVIGATE') {
-    // 执行路由跳转
-    window.history.pushState({}, '', response.path);
-    // 如果是 hash 路由或特定的微前端跳转逻辑，需适配
-  } 
-  else if (response.action === 'HIGHLIGHT') {
-    // 高亮页面元素
-    const el = document.querySelector(response.selector);
-    if (el) el.style.border = "2px solid red";
-  }
-}
-
-```
+以下是针对 **5. 总结和扩展** 章节中关于“平台级建设”的补充设计建议：
 
 ---
 
-### 6. 项目落地建议
+## 5. 总结和扩展 (续)
 
-1. **逐步迁移，不要一次到位:**
-* **Phase 1 (只读助手):** 仅实现介绍功能和文档查询（RAG）。
-* **Phase 2 (导航助手):** 实现页面向量索引，打通路由跳转，处理权限。
-* **Phase 3 (分析助手):** 实现前端向 AI 推送当前页面数据，进行数据洞察。
+### 5.3 平台级建设：Agentic UI 即服务 (AUaaS)
+
+为了实现用户自主接入页面并通过自然语言操作，我们需要构建一套**标准化的接入中枢**。其核心架构应包含以下四个关键层次：
+
+#### 1. 标准化接入 SDK (The Bridge)
+
+提供轻量级的 `agentic-bridge-sdk`。用户只需在自己的业务系统中引入一行脚本，即可实现与平台的双向通信。
+
+* **跨域通信**：基于 `postMessage` 或 `WebSocket`，支持微前端、iframe 或独立页面的接入。
+* **元数据上报**：接入页面自动向平台注册其可用的 `Actions` 清单（如：页面路径、按钮 ID、表单 Schema）。
+
+#### 2. 可视化指令编排 (Action Registry)
+
+平台提供一个管理后台，用户可以像管理 API 文档一样管理 UI 指令：
+
+* **指令描述（Semantic Mapping）**：为每个前端函数绑定自然语言描述。例如，函数 `toggleDrawer()` 映射为“打开侧边抽屉”。
+* **参数映射**：定义 LLM 提取的参数如何精准填入前端组件的 Props 中。
+
+#### 3. 混合执行引擎 (Hybrid Orchestrator)
+
+当用户输入“帮我在 A 系统里导出一份报表”时：
+
+* **意图分发**：平台解析出目标系统 A，并将指令流定向下发。
+* **上下文沙箱**：为每个接入的系统维护独立的执行上下文，确保 A 系统的操作不会误触 B 系统。
+
+#### 4. 安全与审计闸门 (Guardrails)
+
+作为平台，必须控制 AI 操作的风险：
+
+* **操作回溯**：记录每一条 AI 指令的执行轨迹，支持“一键撤销”。
+* **高危拦截**：通过正则或策略引擎，拦截如“删除所有数据”、“修改金额”等敏感指令，强制要求人工在 UI 界面手动确认（Human-in-the-loop）。
+
+---
+
+## 6. 演进路线图 (Roadmap)
+
+| 阶段 | 目标 | 核心产出 |
+| --- | --- | --- |
+| **L1: 原子化** | 解决“对话框控组件”的问题 | 统一的 `ActionBus` 协议与 Hooks |
+| **L2: 页面级** | 解决“跨页面、跨生命周期”控制 | 带有 `notifyNext` 的串行执行引擎 |
+| **L3: 平台级** | 解决“第三方业务系统低成本接入” | 通用 SDK + 指令注册中心 + 权限网关 |
+| **L4: 自进化** | 解决“指令自动生成” | VLM (视觉模型) 自动识别 UI 元素并生成 Action 脚本 |
+
+---
 
 
-2. **解决微前端的隔离问题:**
-* Qiankun 的样式隔离（Shadow DOM）可能会导致 AI 无法高亮子应用的元素。建议 AI 组件只负责发指令，具体的 DOM 操作逻辑（如高亮、弹窗）封装在子应用中，通过 GlobalState 触发。
-
-
-3. **延迟与体验:**
-* LLM 的响应有延迟。在跳转页面时，先立即显示 Loading 状态，或者先跳转页面，再流式输出 AI 的语音/文字介绍，利用页面加载的时间掩盖 AI 思考的时间。
-
-
-
-这个架构能把死板的 B 端系统变成一个灵动的智能平台。你想先从后端的 **LangChain Agent 定义** 开始深入，还是先看 **前端 Qiankun 通信** 的具体实现？
