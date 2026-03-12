@@ -21,7 +21,8 @@ export default defineConfig({
           { text: '前端AI驱动组件', link: '/design/通用AI应用2-前端AI驱动组件' },
           { text: '多智能体和上下文', link: '/design/通用AI应用3-多智能体和上下文' },
           { text: '前端AI Action', link: '/design/通用AI应用4-页面级AI驱动' },
-          { text: '产品化', link: '/design/通用AI应用5-产品化' }
+          { text: '产品化', link: '/design/通用AI应用5-产品化' },
+          { text: 'Playwright', link: '/design/Playwright for TypeScript 常用 API 整理与示例' }
         ]
       },
       {
