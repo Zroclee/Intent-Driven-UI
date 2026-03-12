@@ -64,10 +64,10 @@
     </div>
 
     <!-- AI 悬浮按钮 -->
-    <button class="ai-float-btn" @click="toggleChat" title="产品助手">
+    <!-- <button class="ai-float-btn" @click="toggleChat" title="产品助手">
       <span v-if="!isChatOpen">🤖</span>
       <span v-else>✖️</span>
-    </button>
+    </button> -->
 
     <!-- 悬浮聊天窗口 -->
     <transition name="chat-slide">

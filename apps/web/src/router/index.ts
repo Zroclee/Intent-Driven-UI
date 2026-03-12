@@ -28,6 +28,11 @@ const router = createRouter({
 			component: BusinessSettingView,
 		},
 		{
+			path: "/playwright",
+			name: "Playwright",
+			component: () => import("../views/Playwright/index.vue"),
+		},
+		{
 			path: "/product",
 			name: "product-layout",
 			component: () => import("../views/Product/index.vue"),

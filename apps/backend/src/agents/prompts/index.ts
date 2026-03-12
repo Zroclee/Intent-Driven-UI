@@ -85,6 +85,12 @@ export const CAR_MANAGER_PROMPT = readPromptFile('carManager.md');
 export const PRODUCT_MANAGER_PROMPT = readPromptFile('productPrompt.md');
 
 /**
+ * playwright-prompt
+ * 读取自同目录下的 playwrightPrompt.md
+ */
+export const PLAYWRIGHT_PROMPT = readPromptFile('playwright-prompt.md');
+
+/**
  * 生成主管智能体的提示词
  */
 function generateSupervisorPrompt(): string {

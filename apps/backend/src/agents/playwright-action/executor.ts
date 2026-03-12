@@ -1,10 +1,10 @@
-import { Page, Locator } from 'playwright';
-import { ActionLocator, BrowserAction, AgentActionResponse } from './types.ts';
+import type { Page, Locator } from 'playwright';
+import { ActionLocator, BrowserAction, AgentActionResponse } from './types';
 
 export class PlaywrightExecutor {
   private page: Page;
   // 全局视觉延迟，让用户能看清每一步操作
-  private visualDelayMs: number = 500; 
+  private visualDelayMs: number = 500;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,30 +22,41 @@ export class PlaywrightExecutor {
         return this.page.getByText(target.value); //
       case 'role':
         return this.page.getByRole(target.value as any, { name: target.name }); //
-      default:
-        throw new Error(`Unsupported locator strategy: ${target.type}`);
+      default: {
+        const invalidTarget = target as { type: string };
+        throw new Error(`Unsupported locator strategy: ${invalidTarget.type}`);
+      }
     }
   }
 
   // 执行动作流
-  public async executeActions(response: AgentActionResponse): Promise<{ success: boolean; error?: string; stoppedAtStep?: number }> {
-    console.log(`[Executor] Starting task: ${response.task_id} - ${response.plan_summary}`);
+  public async executeActions(
+    response: AgentActionResponse,
+  ): Promise<{ success: boolean; error?: string; stoppedAtStep?: number }> {
+    console.log(
+      `[Executor] Starting task: ${response.task_id} - ${response.plan_summary}`,
+    );
 
     for (const action of response.actions) {
       console.log(`[Executor] Step ${action.step}: ${action.intent}`);
       try {
         await this.performAction(action);
-        
+
         // 动作完成后的视觉停顿，提升演示观感
         if (action.type !== 'wait') {
           await this.page.waitForTimeout(this.visualDelayMs); //
         }
       } catch (error: any) {
-        console.error(`[Executor] Failed at step ${action.step}:`, error.message);
-        return { 
-          success: false, 
-          error: error.message, 
-          stoppedAtStep: action.step 
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        console.error(
+          `[Executor] Failed at step ${action.step}:`,
+          errorMessage,
+        );
+        return {
+          success: false,
+          error: errorMessage,
+          stoppedAtStep: action.step,
         };
       }
     }
@@ -85,14 +96,16 @@ export class PlaywrightExecutor {
         await locator!.selectOption(payload?.options || []); //
         break;
       case 'goto':
-        await this.page.goto(payload?.url || '', { waitUntil: 'domcontentloaded' }); //
+        await this.page.goto(payload?.url || '', {
+          waitUntil: 'domcontentloaded',
+        }); //
         break;
       case 'wait':
         // 显式等待，例如等待动画完成
         await this.page.waitForTimeout(payload?.delay || 1000); //
         break;
       default:
-        throw new Error(`Unsupported action type: ${type}`);
+        throw new Error(`Unsupported action type: ${type as string}`);
     }
   }
 }
