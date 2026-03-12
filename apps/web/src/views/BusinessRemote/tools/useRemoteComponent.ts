@@ -10,7 +10,6 @@ export function useRemoteComponent<K extends keyof RemoteUI>(name: K) {
 		if (!component) {
 			throw new Error(`Remote component "${name}" not found`);
 		}
-
 		return component;
 	});
 

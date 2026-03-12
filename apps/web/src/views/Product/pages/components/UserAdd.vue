@@ -8,11 +8,11 @@
 			<div class="modal-body">
 				<div class="form-item">
 					<label>用户名称</label>
-					<input v-model="form.username" type="text" placeholder="请输入用户名称" />
+					<input name="form-username" v-model="form.username" type="text" placeholder="请输入用户名称" />
 				</div>
 				<div class="form-item">
 					<label>组织机构</label>
-					<select v-model="form.organization">
+					<select name="form-organization" v-model="form.organization">
 						<option value="" disabled>请选择组织机构</option>
 						<option v-for="org in orgs" :key="org" :value="org">
 							{{ org }}
@@ -21,7 +21,7 @@
 				</div>
 				<div class="form-item">
 					<label>角色</label>
-					<select v-model="form.role">
+					<select name="form-role" v-model="form.role">
 						<option value="" disabled>请选择角色</option>
 						<option v-for="role in roles" :key="role" :value="role">
 							{{ role }}
