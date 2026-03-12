@@ -532,7 +532,7 @@ export default defineConfig({
   use: {
     baseURL: 'https://example.com',
     actionTimeout: 10000, // 操作超时
-    screenshot: 'only-on-failure'
+    screenshot: 'only-on-failure',
   },
   projects: [
     { name: 'chromium', use: devices['Desktop Chrome'] },
