@@ -531,7 +531,7 @@ export default defineConfig({
   },
   use: {
     baseURL: 'https://example.com',
-    actionTimeout: 10000, // 操作超时
+    actionTimeout: 10000, 
     screenshot: 'only-on-failure',
   },
   projects: [
@@ -676,13 +676,13 @@ try {
 
 | API | 类型定义 | 示例返回类型 |
 |------|----------|--------------|
-| `page.goto()` | `goto(url: string, options?: GotoOptions)` | Promise<Response> |
-| `page.locator()` | `locator(selector: string)` | Locator<T> |
-| `locator.click()` | `click(options?: ClickOptions)` | Promise<void> |
-| `page.screenshot()` | `screenshot(options?: ScreenshotOptions)` | Promise<string \| Buffer> |
-| `page.fill()` / `.fill()` | `fill(value: string, options?)` | Promise<void> |
-| `expect()` | `expect(locator).toBeVisible()` | Promise<void> |
-| `locator.evaluate()` | `evaluate<R>(fn, data)` | Promise<R> |
+| `page.goto()` | `goto(url: string, options?: GotoOptions)` | `Promise<Response>` |
+| `page.locator()` | `locator(selector: string)` | `Locator<T>` |
+| `locator.click()` | `click(options?: ClickOptions)` | `Promise<void>` |
+| `page.screenshot()` | `screenshot(options?: ScreenshotOptions)` | `Promise<string \| Buffer>` |
+| `page.fill()` / `.fill()` | `fill(value: string, options?)` | `Promise<void>` |
+| `expect()` | `expect(locator).toBeVisible()` | `Promise<void>` |
+| `locator.evaluate()` | `evaluate<R>(fn, data)` | `Promise<R>` |
 
 ---
 
