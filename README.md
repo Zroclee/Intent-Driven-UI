@@ -41,9 +41,9 @@
 ### 3.1 项目目录
 ```
 ├── apps   // 应用
-│   ├── web  // 前端应用
-│   ├── express  // 远程组件服务
-│   └── backend  // 后端应用
+│   ├── web  // 前端应用 vue3+vite
+│   ├── express  // 远程组件服务 express + typescript
+│   └── backend  // 后端应用 nestjs
 ├── packages
 │   ├── shared  // 公共UI组件库
 │   └── remote  // 前端远程组件库
