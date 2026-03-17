@@ -91,6 +91,12 @@ export const PRODUCT_MANAGER_PROMPT = readPromptFile('productPrompt.md');
 export const PLAYWRIGHT_PROMPT = readPromptFile('playwright-prompt.md');
 
 /**
+ * deepagent-prompt
+ * 读取自同目录下的 deepagentPrompt.md
+ */
+export const DEEPAGENT_PROMPT = readPromptFile('deepagent-prompt.md');
+
+/**
  * 生成主管智能体的提示词
  */
 function generateSupervisorPrompt(): string {

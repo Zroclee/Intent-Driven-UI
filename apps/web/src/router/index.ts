@@ -33,6 +33,11 @@ const router = createRouter({
 			component: () => import("../views/Playwright/index.vue"),
 		},
 		{
+			path: "/deep-agent",
+			name: "PlaywrightDeepAgent",
+			component: () => import("../views/Playwright/deepAgent.vue"),
+		},
+		{
 			path: "/product",
 			name: "product-layout",
 			component: () => import("../views/Product/index.vue"),

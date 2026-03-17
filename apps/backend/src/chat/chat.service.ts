@@ -3,6 +3,7 @@ import { streamInvoke } from '../agents/agent_car';
 import { streamInvoke as streamInvokeMulti } from '../agents/agent_multi';
 import { streamInvoke as streamInvokeProduct } from '../agents/agent_product';
 import { streamInvoke as streamInvokePlaywright } from '../agents/agent_playwright';
+import { streamInvoke as streamInvokeDeepAgent } from '../agents/agent_deepagent';
 
 @Injectable()
 export class ChatService {
@@ -28,5 +29,9 @@ export class ChatService {
 
   streamPlaywrightChat(query: string, thread_id: string = 'default') {
     return streamInvokePlaywright(query, thread_id);
+  }
+
+  streamDeepAgentChat(query: string, thread_id: string = 'default') {
+    return streamInvokeDeepAgent(query, thread_id);
   }
 }

@@ -24,6 +24,9 @@ const navigateTo = (path: string) => {
 				<button @click="navigateTo('/playwright')">
 					进入 Playwright 助手
 				</button>
+				<button @click="navigateTo('/deep-agent')">
+					进入 Playwright 深度助手
+				</button>
 			</div>
 		</div>
 	</main>

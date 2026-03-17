@@ -19,6 +19,13 @@ cd backend
 pnpm install
 pnpm add langchain @langchain/core @langchain/langgraph @langchain/openai dotenv zod
 ```
+新增LangChain的deepagents库，遇到版本对齐问题，需要安装最新版本的deepagents库。
+
+```bash
+pnpm install deepagents@latest @langchain/openai@latest @langchain/core@latest langchain@latest
+```
+
+
 
 ## 运行项目
 
