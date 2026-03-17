@@ -1,6 +1,6 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { createDeepAgent, FilesystemBackend } from 'deepagents';
-// import { MemorySaver } from '@langchain/langgraph';
+import { MemorySaver } from '@langchain/langgraph-checkpoint';
 import * as path from 'path';
 
 import { StreamEvent, StreamEventType } from './types/streamEvent';
@@ -14,7 +14,7 @@ const model = new ChatOpenAI({
   },
 });
 
-// const checkpointer = new MemorySaver();
+const checkpointer = new MemorySaver();
 const backend = new FilesystemBackend({
   rootDir: path.resolve(process.cwd(), 'src/agents/files'),
   virtualMode: true,
@@ -23,7 +23,8 @@ const backend = new FilesystemBackend({
 const agent = createDeepAgent({
   model: model,
   backend: backend,
-  memory: ['./AGENTS.md', './.deepagents/AGENTS.md'],
+  checkpointer: checkpointer,
+  memory: ['./AGENTS.md'],
   interruptOn: {
     read_file: true,
     write_file: true,

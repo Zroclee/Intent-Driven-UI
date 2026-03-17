@@ -88,13 +88,13 @@ export const PRODUCT_MANAGER_PROMPT = readPromptFile('productPrompt.md');
  * playwright-prompt
  * 读取自同目录下的 playwrightPrompt.md
  */
-export const PLAYWRIGHT_PROMPT = readPromptFile('playwright-prompt.md');
+export const PLAYWRIGHT_PROMPT = readPromptFile('playwright_prompt.md');
 
 /**
  * deepagent-prompt
  * 读取自同目录下的 deepagentPrompt.md
  */
-export const DEEPAGENT_PROMPT = readPromptFile('deepagent-prompt.md');
+export const DEEPAGENT_PROMPT = readPromptFile('deepagent_prompt.md');
 
 /**
  * 生成主管智能体的提示词

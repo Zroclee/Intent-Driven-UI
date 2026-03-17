@@ -52,8 +52,6 @@ const add_track = (tracks: { lng: number; lat: number }[]) => {
 	}
 };
 
-const add_window = (content: string[]) => {};
-
 defineExpose({
 	add_marker,
 	add_track,

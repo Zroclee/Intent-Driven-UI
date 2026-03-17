@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { playwrightManager } from './BrowserManager';
 
 const corsOptions = {
   origin: true, // 允许的前端应用源
@@ -13,6 +14,7 @@ const corsOptions = {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors(corsOptions);
+  await playwrightManager.start();
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((err) => {

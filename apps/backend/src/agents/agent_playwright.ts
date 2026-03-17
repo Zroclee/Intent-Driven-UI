@@ -1,12 +1,20 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { createAgent, createMiddleware } from 'langchain';
+import { MemorySaver } from '@langchain/langgraph';
 import { HumanMessage } from '@langchain/core/messages';
 import { PLAYWRIGHT_PROMPT } from './prompts';
+import { getCurrentTimeTool } from './tools/common';
 import {
   executePlaywrightActionsTool,
-  startBrowserTool,
-  closeBrowserTool,
-} from './tools/tool-playwright';
+  extractPageStateTool,
+} from './tools/playwright';
+import {
+  createFileTool,
+  deleteFileTool,
+  readFileTool,
+  writeFileTool,
+} from './tools/fileManager';
+
 import { StreamEvent, StreamEventType } from './types/streamEvent';
 
 const model = new ChatOpenAI({
@@ -21,11 +29,11 @@ const model = new ChatOpenAI({
 const toolMonitoringMiddleware = createMiddleware({
   name: 'ToolMonitoringMiddleware',
   wrapToolCall: (request, handler) => {
-    console.log(`Executing tool: ${request.toolCall.name}`);
-    console.log(`Arguments: ${JSON.stringify(request.toolCall.args)}`);
+    // console.log(`Executing tool: ${request.toolCall.name}`);
+    // console.log(`Arguments: ${JSON.stringify(request.toolCall.args)}`);
     try {
       const result = handler(request);
-      console.log('Tool completed successfully');
+      // console.log('Tool completed successfully');
       return result;
     } catch (e) {
       console.log(`Tool failed: ${e}`);
@@ -34,9 +42,20 @@ const toolMonitoringMiddleware = createMiddleware({
   },
 });
 
+const checkpointer = new MemorySaver();
+
 const agent = createAgent({
   model: model,
-  tools: [startBrowserTool, closeBrowserTool, executePlaywrightActionsTool],
+  tools: [
+    getCurrentTimeTool,
+    executePlaywrightActionsTool,
+    extractPageStateTool,
+    createFileTool,
+    deleteFileTool,
+    readFileTool,
+    writeFileTool,
+  ],
+  checkpointer,
   systemPrompt: PLAYWRIGHT_PROMPT,
   middleware: [toolMonitoringMiddleware],
 });
@@ -53,7 +72,7 @@ export async function* streamInvoke(query: string, _thread_id: string) {
 
     const stream = await agent.stream(
       { messages: [new HumanMessage(query)] },
-      { streamMode: 'messages' },
+      { streamMode: 'messages', configurable: { thread_id: _thread_id } },
     );
 
     for await (const chunk of stream) {

@@ -14,8 +14,8 @@ export class PlaywrightExecutor {
   private getLocator(target: ActionLocator): Locator {
     switch (target.type) {
       case 'markId':
-        // 假设视觉标记通过 custom attribute data-som-id 注入
-        return this.page.locator(`[data-som-id="${target.value}"]`); //
+        // 假设视觉标记通过 custom attribute idu-mark-id 注入
+        return this.page.locator(`[idu-mark-id="${target.value}"]`); //
       case 'css':
         return this.page.locator(target.value); //
       case 'text':

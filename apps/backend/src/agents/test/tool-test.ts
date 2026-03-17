@@ -1,4 +1,4 @@
-import { executePlaywrightActionsTool } from '../tools/tool-playwright';
+import { executePlaywrightActionsTool } from '../tools/playwright';
 
 /**
  * 测试工具链的可用性

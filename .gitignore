@@ -72,6 +72,7 @@ logs/
 apps/backend/dist/
 apps/backend/.nest-cli.json
 apps/backend/node_modules/
+apps/backend/src/agents/memory/
 
 # ================================
 # VitePress

@@ -99,9 +99,9 @@ const menuItems = ref<MenuItem[]>([
 
 const isChatOpen = ref(false);
 
-const toggleChat = () => {
-  isChatOpen.value = !isChatOpen.value;
-};
+// const toggleChat = () => {
+//   isChatOpen.value = !isChatOpen.value;
+// };
 
 const router = useRouter();
 
