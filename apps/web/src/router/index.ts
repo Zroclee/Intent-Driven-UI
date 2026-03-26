@@ -37,6 +37,11 @@ const router = createRouter({
       component: () => import("../views/Playwright/deepAgent.vue"),
     },
     {
+      path: "/productLogin",
+      name: "ProductLogin",
+      component: () => import("../views/Product/login.vue"),
+    },
+    {
       path: "/product",
       name: "product-layout",
       component: () => import("../views/Product/index.vue"),
@@ -72,6 +77,18 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.path.startsWith("/product") && to.name !== "ProductLogin") {
+    if (sessionStorage.getItem("islogin") === "true") {
+      next();
+    } else {
+      next({ name: "ProductLogin" });
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
